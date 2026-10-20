@@ -1,37 +1,44 @@
-import React, { useState, useEffect } from "react";
+import { useContext } from "react";
 import PageTemplate from "../components/templateMovieListPage";
+import { MoviesContext } from "../contexts/moviesContext";
+import { useQueries } from "@tanstack/react-query";
+import { getMovie } from "../api/tmdb-api";
+import Spinner from "../components/spinner";
 
-const HomePage = (props) => {
-  const [movies, setMovies] = useState([]);
-  const favorites = movies.filter((m) => m.favorite);
-  localStorage.setItem("favorites", JSON.stringify(favorites));
+const FavoriteMoviesPage = () => {
+  const { favorites: movieIds } = useContext(MoviesContext);
 
-  const addToFavorites = (movieId) => {
-    const updatedMovies = movies.map((m) =>
-      m.id === movieId ? { ...m, favorite: true } : m,
-    );
-    setMovies(updatedMovies);
-  };
+  // Create an array of queries and run in parallel.
+  const favoriteMovieQueries = useQueries({
+    queries: movieIds.map((movieId) => {
+      return {
+        queryKey: ["movie", { id: movieId }],
+        queryFn: getMovie,
+      };
+    }),
+  });
 
-  useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&include_adult=false&page=1`,
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        return json.results;
-      })
-      .then((movies) => {
-        setMovies(movies);
-      });
-  }, []);
+  // Check if any of the parallel queries is still loading.
+  const isPending = favoriteMovieQueries.find((m) => m.isPending === true);
+
+  if (isPending) {
+    return <Spinner />;
+  }
+
+  const movies = favoriteMovieQueries.map((q) => {
+    q.data.genre_ids = q.data.genres.map((g) => g.id);
+    return q.data;
+  });
+
+  const toDo = () => true;
 
   return (
     <PageTemplate
-      title="Discover Movies"
+      title="Favourite Movies"
       movies={movies}
-      selectFavorite={addToFavorites}
+      selectFavorite={toDo}
     />
   );
 };
-export default HomePage;
+
+export default FavoriteMoviesPage;

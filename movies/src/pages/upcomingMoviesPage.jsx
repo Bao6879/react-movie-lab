@@ -1,36 +1,33 @@
 import React, { useState, useEffect } from "react";
+import { getMovies } from "../api/tmdb-api";
 import PageTemplate from "../components/templateMovieListPage";
+import { useQuery } from "@tanstack/react-query";
+import Spinner from "../components/spinner";
+import AddToWatchlistIcon from "../components/cardIcons/addToWatchlist.jsx";
 
 const upcomingMoviesPage = (props) => {
-  const [movies, setMovies] = useState([]);
-  const favorites = movies.filter((m) => m.favorite);
-  localStorage.setItem("favorites", JSON.stringify(favorites));
+  const { data, error, isPending, isError } = useQuery({
+    queryKey: ["upcoming"],
+    queryFn: getMovies,
+  });
 
-  const addToFavorites = (movieId) => {
-    const updatedMovies = movies.map((m) =>
-      m.id === movieId ? { ...m, favorite: true } : m,
-    );
-    setMovies(updatedMovies);
-  };
+  if (isPending) {
+    return <Spinner />;
+  }
 
-  useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/upcoming?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=1`,
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        return json.results;
-      })
-      .then((movies) => {
-        setMovies(movies);
-      });
-  }, []);
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
+
+  const movies = data.results;
 
   return (
     <PageTemplate
       title="Upcoming Movies"
       movies={movies}
-      selectFavorite={addToFavorites}
+      action={(movie) => {
+        return <AddToWatchlistIcon movie={movie} />;
+      }}
     />
   );
 };

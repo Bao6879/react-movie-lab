@@ -30,11 +30,7 @@ const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  let discoverState = 1;
-  if (useContext(MoviesContext).discoverState != null) {
-    discoverState = useContext(MoviesContext).discoverState;
-  }
-  const setDiscoverState = useContext(MoviesContext).setDiscoverState;
+  const { discoverState, changeDiscoverState } = useContext(MoviesContext);
   const location = useLocation();
   const open = Boolean(anchorEl);
 
@@ -43,8 +39,9 @@ const SiteHeader = () => {
 
   const navigate = useNavigate();
 
-  const constructPath = (url) => {
-    switch (discoverState) {
+  const constructPath = (url, state) => {
+    if (state == 0) state = discoverState;
+    switch (state) {
       case 1:
         return url + "/discover";
       case 2:
@@ -60,8 +57,9 @@ const SiteHeader = () => {
     setAnchorEl(null);
     let start = "/movies";
     if (location.pathname.startsWith("/shows")) start = "/shows";
-    setDiscoverState(discoverType);
-    navigate(constructPath(start));
+    changeDiscoverState(discoverType);
+    console.log(constructPath(start, discoverType));
+    navigate(constructPath(start, discoverType));
   };
 
   const handleMenu = (event) => {
@@ -157,8 +155,8 @@ const SiteHeader = () => {
               }
               onClick={() => {
                 if (location.pathname.startsWith("/movies"))
-                  navigate(constructPath("/shows"));
-                else navigate(constructPath("/movies"));
+                  navigate(constructPath("/shows", 0));
+                else navigate(constructPath("/movies", 0));
               }}
               sx={headerButtonSx}
             >
@@ -213,7 +211,7 @@ const SiteHeader = () => {
                 Top Rated
               </MenuItem>
               <MenuItem
-                onClick={() => handleDiscoverMenuSelect(3)}
+                onClick={() => handleDiscoverMenuSelect(4)}
                 sx={
                   discoverState == 4
                     ? { color: "red", disabled: true }
@@ -234,7 +232,6 @@ const SiteHeader = () => {
               People
             </Button>
             <Button
-              key=""
               variant="text"
               color="inherit"
               startIcon={<MiscellaneousServicesIcon />}

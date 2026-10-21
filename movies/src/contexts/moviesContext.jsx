@@ -6,8 +6,7 @@ const MoviesContextProvider = (props) => {
   const [favorites, setFavorites] = useState([]);
   const [myReviews, setMyReviews] = useState({});
   const [watchlist, setWatchlist] = useState([]);
-  let [discoverState, setDiscoverState] = useState([]);
-  discoverState = 1;
+  let [discoverState, setDiscoverState] = useState(1);
 
   const addToFavorites = (movie) => {
     let newFavorites = [];
@@ -33,8 +32,8 @@ const MoviesContextProvider = (props) => {
     setWatchlist(newWatchlist);
   };
 
-  const changeDiscoverState = (discoverState) => {
-    setDiscoverState(discoverState);
+  const changeDiscoverState = (number) => {
+    setDiscoverState(number);
   };
 
   const removeFromFavorites = (movie) => {

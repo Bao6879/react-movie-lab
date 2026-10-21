@@ -25,14 +25,22 @@ import PeopleIcon from "@mui/icons-material/People";
 import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices";
 import { MoviesContext } from "../../contexts/moviesContext";
 import { useContext } from "react";
+import ShuffleIcon from "@mui/icons-material/Shuffle";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Check from "@mui/icons-material/Check";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorDisc, setAnchorDisc] = useState(null);
+  const [anchorMisc, setAnchorMisc] = useState(null);
+  const [anchorAcc, setAnchorAcc] = useState(null);
   const { discoverState, changeDiscoverState } = useContext(MoviesContext);
   const location = useLocation();
-  const open = Boolean(anchorEl);
+  const openMisc = Boolean(anchorMisc),
+    openDisc = Boolean(anchorDisc),
+    openAcc = Boolean(anchorAcc);
 
   const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -50,8 +58,17 @@ const SiteHeader = () => {
         return url + "/top";
       case 4:
         return url + "/upcoming";
+      default:
+        return url;
     }
   };
+
+  const discoverStateOptions = [
+    "Discover",
+    "Now Playing",
+    "Top Rated",
+    "Upcoming",
+  ];
 
   const handleDiscoverMenuSelect = (discoverType) => {
     setAnchorEl(null);
@@ -62,12 +79,28 @@ const SiteHeader = () => {
     navigate(constructPath(start, discoverType));
   };
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleMenuMisc = (event) => {
+    setAnchorMisc(event.currentTarget);
   };
 
-  const handleClose = (event) => {
-    setAnchorEl(null);
+  const handleCloseMisc = (event) => {
+    setAnchorMisc(null);
+  };
+
+  const handleMenuDisc = (event) => {
+    setAnchorDisc(event.currentTarget);
+  };
+
+  const handleCloseDisc = (event) => {
+    setAnchorDisc(null);
+  };
+
+  const handleMenuAcc = (event) => {
+    setAnchorAcc(event.currentTarget);
+  };
+
+  const handleCloseAcc = (event) => {
+    setAnchorAcc(null);
   };
 
   const headerButtonSx = {
@@ -167,7 +200,7 @@ const SiteHeader = () => {
               disableRipple
               variant="text"
               color="inherit"
-              onClick={handleMenu}
+              onClick={handleMenuDisc}
               startIcon={<ArrowDropDownCircleIcon />}
               sx={headerButtonSx}
             >
@@ -176,56 +209,33 @@ const SiteHeader = () => {
 
             <Menu
               id="discoverMenu"
-              anchorEl={anchorEl}
-              onClose={handleClose}
-              open={open}
+              anchorEl={anchorDisc}
+              onClose={handleCloseDisc}
+              open={openDisc}
             >
-              <MenuItem
-                onClick={() => handleDiscoverMenuSelect(1)}
-                sx={
-                  discoverState == 1
-                    ? { color: "red", disabled: true }
-                    : { color: "black" }
-                }
-              >
-                Discover
-              </MenuItem>
-              <MenuItem
-                onClick={() => handleDiscoverMenuSelect(2)}
-                sx={
-                  discoverState == 2
-                    ? { color: "red", disabled: true }
-                    : { color: "black" }
-                }
-              >
-                Now Playing
-              </MenuItem>
-              <MenuItem
-                onClick={() => handleDiscoverMenuSelect(3)}
-                sx={
-                  discoverState == 3
-                    ? { color: "red", disabled: true }
-                    : { color: "black" }
-                }
-              >
-                Top Rated
-              </MenuItem>
-              <MenuItem
-                onClick={() => handleDiscoverMenuSelect(4)}
-                sx={
-                  discoverState == 4
-                    ? { color: "red", disabled: true }
-                    : { color: "black" }
-                }
-              >
-                Upcoming
-              </MenuItem>
+              {discoverStateOptions.map((option, index) => (
+                <MenuItem
+                  onClick={() => handleDiscoverMenuSelect(index + 1)}
+                  disabled={discoverState === index + 1}
+                  sx={discoverState !== index + 1 ? { color: "black" } : {}}
+                >
+                  <ListItemIcon>
+                    {discoverState === index + 1 ? (
+                      <Check fontSize="small" />
+                    ) : null}
+                  </ListItemIcon>
+                  {option}
+                </MenuItem>
+              ))}
             </Menu>
 
             <Button
               disableRipple
               variant="text"
               color="inherit"
+              onClick={() => {
+                navigate(constructPath("/people", -1));
+              }}
               startIcon={<PeopleIcon />}
               sx={headerButtonSx}
             >
@@ -235,13 +245,55 @@ const SiteHeader = () => {
               variant="text"
               color="inherit"
               startIcon={<MiscellaneousServicesIcon />}
+              onClick={handleMenuMisc}
               sx={headerButtonSx}
             >
               Misc.
             </Button>
-            <IconButton key="" color="inherit" sx={headerButtonSx}>
+
+            <Menu
+              id="miscMenu"
+              anchorEl={anchorMisc}
+              onClose={handleCloseMisc}
+              open={openMisc}
+            >
+              <MenuItem>
+                {" "}
+                <ListItemIcon>
+                  <ShuffleIcon />
+                </ListItemIcon>
+                I'm Feeling Lucky
+              </MenuItem>
+              <MenuItem>
+                {" "}
+                <ListItemIcon>
+                  <QuestionMarkIcon />
+                </ListItemIcon>
+                Quiz Mode
+              </MenuItem>
+            </Menu>
+            <IconButton
+              key=""
+              color="inherit"
+              sx={headerButtonSx}
+              onClick={handleMenuAcc}
+            >
               <AccountCircleIcon sx={{ color: "white", fontSize: 50 }} />
             </IconButton>
+            <Menu
+              id="accMenu"
+              anchorEl={anchorAcc}
+              onClose={handleCloseAcc}
+              open={openAcc}
+            >
+              <MenuItem>
+                {" "}
+                <ListItemIcon>
+                  <ShuffleIcon />
+                </ListItemIcon>
+                I'm Feeling Lucky
+              </MenuItem>
+            </Menu>
           </Toolbar>
         </Toolbar>
       </AppBar>

@@ -23,33 +23,53 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import PeopleIcon from "@mui/icons-material/People";
 import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices";
+import { MoviesContext } from "../../contexts/moviesContext";
+import { useContext } from "react";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  let discoverState = 1;
+  if (useContext(MoviesContext).discoverState != null) {
+    discoverState = useContext(MoviesContext).discoverState;
+  }
+  const setDiscoverState = useContext(MoviesContext).setDiscoverState;
   const location = useLocation();
   const open = Boolean(anchorEl);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  // const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const navigate = useNavigate();
 
-  const menuOptions = [
-    { label: "Home", path: "/" },
-    { label: "Favorites", path: "/movies/favorites" },
-    { label: "Upcoming", path: "/movies/upcoming" },
-    { label: "Watchlist", path: "/movies/watchlist" },
-  ];
+  const constructPath = (url) => {
+    switch (discoverState) {
+      case 1:
+        return url + "/discover";
+      case 2:
+        return url + "/playing";
+      case 3:
+        return url + "/top";
+      case 4:
+        return url + "/upcoming";
+    }
+  };
 
-  const handleMenuSelect = (pageURL) => {
+  const handleDiscoverMenuSelect = (discoverType) => {
     setAnchorEl(null);
-    navigate(pageURL);
+    let start = "/movies";
+    if (location.pathname.startsWith("/shows")) start = "/shows";
+    setDiscoverState(discoverType);
+    navigate(constructPath(start));
   };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (event) => {
+    setAnchorEl(null);
   };
 
   const headerButtonSx = {
@@ -127,29 +147,87 @@ const SiteHeader = () => {
             <Button
               variant="text"
               color="inherit"
-              onClick={() => handleMenuSelect("/")}
+              disableRipple
               startIcon={
-                location.pathname == "/" ? <TheaterComedyIcon /> : <MovieIcon />
+                location.pathname.startsWith("/movies") ? (
+                  <TheaterComedyIcon />
+                ) : (
+                  <MovieIcon />
+                )
               }
+              onClick={() => {
+                if (location.pathname.startsWith("/movies"))
+                  navigate(constructPath("/shows"));
+                else navigate(constructPath("/movies"));
+              }}
               sx={headerButtonSx}
             >
               TV Shows
             </Button>
             <Button
-              key=""
+              id="discoverSelect"
+              disableRipple
               variant="text"
               color="inherit"
-              onClick={() => handleMenuSelect("/")}
+              onClick={handleMenu}
               startIcon={<ArrowDropDownCircleIcon />}
               sx={headerButtonSx}
             >
               Discover
             </Button>
+
+            <Menu
+              id="discoverMenu"
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              open={open}
+            >
+              <MenuItem
+                onClick={() => handleDiscoverMenuSelect(1)}
+                sx={
+                  discoverState == 1
+                    ? { color: "red", disabled: true }
+                    : { color: "black" }
+                }
+              >
+                Discover
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleDiscoverMenuSelect(2)}
+                sx={
+                  discoverState == 2
+                    ? { color: "red", disabled: true }
+                    : { color: "black" }
+                }
+              >
+                Now Playing
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleDiscoverMenuSelect(3)}
+                sx={
+                  discoverState == 3
+                    ? { color: "red", disabled: true }
+                    : { color: "black" }
+                }
+              >
+                Top Rated
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleDiscoverMenuSelect(3)}
+                sx={
+                  discoverState == 4
+                    ? { color: "red", disabled: true }
+                    : { color: "black" }
+                }
+              >
+                Upcoming
+              </MenuItem>
+            </Menu>
+
             <Button
-              key=""
+              disableRipple
               variant="text"
               color="inherit"
-              onClick={() => handleMenuSelect("/")}
               startIcon={<PeopleIcon />}
               sx={headerButtonSx}
             >
@@ -159,18 +237,12 @@ const SiteHeader = () => {
               key=""
               variant="text"
               color="inherit"
-              onClick={() => handleMenuSelect("/")}
               startIcon={<MiscellaneousServicesIcon />}
               sx={headerButtonSx}
             >
               Misc.
             </Button>
-            <IconButton
-              key=""
-              color="inherit"
-              onClick={() => handleMenuSelect("/")}
-              sx={headerButtonSx}
-            >
+            <IconButton key="" color="inherit" sx={headerButtonSx}>
               <AccountCircleIcon sx={{ color: "white", fontSize: 50 }} />
             </IconButton>
           </Toolbar>

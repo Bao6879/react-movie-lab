@@ -7,10 +7,15 @@ import Button from "@mui/material/Button";
 import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import Box from "@mui/material/Box";
+import tmpImg from "../../images/pexels-dziana-hasanbekava-5480827.jpg";
 import { useNavigate } from "react-router";
 import { styled } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
@@ -41,63 +46,141 @@ const SiteHeader = () => {
 
   return (
     <>
-      <AppBar position="fixed" color="secondary">
-        <Toolbar>
-          <Typography variant="h4" sx={{ flexGrow: 1 }}>
-            TMDB Client
-          </Typography>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            All you ever wanted to know about Movies!
-          </Typography>
-          {isMobile ? (
-            <>
-              <IconButton
-                aria-label="menu"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={open}
-                onClose={() => setAnchorEl(null)}
-              >
-                {menuOptions.map((opt) => (
-                  <MenuItem
-                    key={opt.label}
-                    onClick={() => handleMenuSelect(opt.path)}
-                  >
-                    {opt.label}
-                  </MenuItem>
-                ))}
-              </Menu>
-            </>
-          ) : (
-            <>
-              {menuOptions.map((opt) => (
-                <Button
-                  key={opt.label}
-                  color="inherit"
-                  onClick={() => handleMenuSelect(opt.path)}
-                >
-                  {opt.label}
-                </Button>
-              ))}
-            </>
-          )}
+      <AppBar
+        sx={{
+          backgroundColor: "grey",
+          borderRadius: 2,
+          width: "99%",
+          left: 0,
+          right: 0,
+          margin: "auto",
+        }}
+      >
+        <Toolbar sx={{ display: "flex" }}>
+          <Box
+            component="img"
+            src={tmpImg}
+            sx={{
+              height: 60,
+              width: 120,
+              boxShadow: 5,
+              borderRadius: 5,
+            }}
+            edge="start"
+          />
+          <TextField
+            id="name-search"
+            label="Search for a movie"
+            type="search"
+            variant="filled"
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              },
+            }}
+            sx={{
+              margin: 1.5,
+              width: 1000,
+              backgroundColor: "white",
+              boxShadow: 5,
+              borderRadius: 1,
+            }}
+            // value={props.titleFilter}
+            // onChange={handleTextChange}
+          />
+          <Button
+            variant="contained"
+            color="inherit"
+            onClick={() => handleMenuSelect("/")}
+            sx={{
+              height: 60,
+              borderRadius: 2,
+              color: "black",
+              marginLeft: "auto",
+              marginRight: 0,
+              boxShadow: 5,
+              fontSize: 15,
+              fontWeight: 600,
+            }}
+          >
+            TV Shows
+          </Button>
+          <Button
+            key=""
+            variant="contained"
+            color="inherit"
+            onClick={() => handleMenuSelect("/")}
+            sx={{
+              height: 60,
+              borderRadius: 2,
+              color: "black",
+              marginLeft: 2,
+              marginRight: 0,
+              boxShadow: 5,
+              fontSize: 15,
+              fontWeight: 600,
+            }}
+          >
+            Discover
+          </Button>
+          <Button
+            key=""
+            variant="contained"
+            color="inherit"
+            onClick={() => handleMenuSelect("/")}
+            sx={{
+              height: 60,
+              borderRadius: 2,
+              color: "black",
+              marginLeft: 2,
+              marginRight: 0,
+              boxShadow: 5,
+              fontSize: 15,
+              fontWeight: 600,
+            }}
+          >
+            People
+          </Button>
+          <Button
+            key=""
+            variant="contained"
+            color="inherit"
+            onClick={() => handleMenuSelect("/")}
+            sx={{
+              height: 60,
+              borderRadius: 2,
+              color: "black",
+              marginLeft: 2,
+              marginRight: 0,
+              boxShadow: 5,
+              fontSize: 15,
+              fontWeight: 600,
+            }}
+          >
+            Miscellaneous
+          </Button>
+          <Button
+            key=""
+            variant="contained"
+            color="inherit"
+            onClick={() => handleMenuSelect("/")}
+            sx={{
+              height: 60,
+              borderRadius: 2,
+              color: "black",
+              marginLeft: 2,
+              marginRight: 0,
+              boxShadow: 5,
+              fontSize: 15,
+              fontWeight: 600,
+            }}
+          >
+            Account
+          </Button>
         </Toolbar>
       </AppBar>
       <Offset />

@@ -17,20 +17,23 @@ import { useContext } from "react";
 import { MoviesContext } from "../../contexts/moviesContext";
 import { getMovieImages } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
+import { dateFormatter } from "../../util";
 import Spinner from "../spinner";
 
 export default function MovieCard({ movie, action }) {
   const { favorites, addToFavorites } = useContext(MoviesContext);
   const [currentPoster, setCurrentPoster] = useState(0);
+  const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
     //On render
-    setInterval(() => {
+    if (!hovering) return;
+    const timer = setInterval(() => {
       setCurrentPoster((prev) => (prev + 1) % 3);
-    }, 5000);
+    }, 2000);
 
-    return () => clearInterval();
-  }, []);
+    return () => clearInterval(timer);
+  }, [hovering]);
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["images", { id: movie.id }],
     queryFn: getMovieImages,
@@ -57,8 +60,21 @@ export default function MovieCard({ movie, action }) {
   };
 
   return (
-    <Card>
-      {/* <CardHeader
+    <Card
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      sx={{
+        transition:
+          "transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease",
+
+        "&:hover": {
+          transform: "translateY(-8px)",
+          boxShadow: 5,
+          backgroundColor: "lightgrey",
+        },
+      }}
+    >
+      <CardHeader
         avatar={
           movie.favorite ? (
             <Avatar sx={{ backgroundColor: "red" }}>
@@ -66,39 +82,26 @@ export default function MovieCard({ movie, action }) {
             </Avatar>
           ) : null
         }
+        action={action(movie)}
         title={
           <Typography variant="h5" component="p">
-            {movie.title}{" "}
+            {movie.title}
           </Typography>
         }
-      /> */}
-
-      <CardMedia sx={{ height: 500 }} image={posterUrl} />
+      />
+      <Link to={`/movies/${movie.id}`}>
+        <CardMedia sx={{ height: 500 }} image={posterUrl} />
+      </Link>
       <CardContent>
         <Grid container>
           <Grid size={{ xs: 6 }}>
             <Typography variant="h6" component="p">
               <CalendarIcon fontSize="small" />
-              {movie.release_date}
-            </Typography>
-          </Grid>
-          <Grid size={{ xs: 6 }}>
-            <Typography variant="h6" component="p">
-              <StarRateIcon fontSize="small" />
-              {"  "} {movie.vote_average}{" "}
+              {dateFormatter(movie.release_date)}
             </Typography>
           </Grid>
         </Grid>
       </CardContent>
-      <CardActions disableSpacing>
-        {action(movie)}
-
-        <Link to={`/movies/${movie.id}`}>
-          <Button variant="outlined" size="medium" color="primary">
-            More Info ...
-          </Button>
-        </Link>
-      </CardActions>
     </Card>
   );
 }

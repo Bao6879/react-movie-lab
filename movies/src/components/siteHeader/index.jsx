@@ -16,11 +16,19 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
+import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
+import MovieIcon from "@mui/icons-material/Movie";
+import { useLocation } from "react-router";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
+import PeopleIcon from "@mui/icons-material/People";
+import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
 const SiteHeader = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const location = useLocation();
   const open = Boolean(anchorEl);
 
   const theme = useTheme();
@@ -44,11 +52,27 @@ const SiteHeader = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  const headerButtonSx = {
+    height: 60,
+    color: "white",
+    margin: "auto",
+    fontSize: 22,
+    fontWeight: 600,
+    padding: 0,
+
+    transition: "transform 200ms ease, color 200ms ease",
+
+    "&:hover": {
+      transform: "translateY(-3px)",
+      color: "yellow",
+    },
+  };
+
   return (
     <>
       <AppBar
         sx={{
-          backgroundColor: "grey",
+          backgroundColor: "dimgrey",
           borderRadius: 2,
           width: "99%",
           left: 0,
@@ -84,103 +108,72 @@ const SiteHeader = () => {
             }}
             sx={{
               margin: 1.5,
-              width: 1000,
+              width: 1500,
               backgroundColor: "white",
               boxShadow: 5,
-              borderRadius: 1,
+              borderRadius: 3,
             }}
             // value={props.titleFilter}
             // onChange={handleTextChange}
           />
-          <Button
-            variant="contained"
-            color="inherit"
-            onClick={() => handleMenuSelect("/")}
+          <Toolbar
             sx={{
-              height: 60,
-              borderRadius: 2,
-              color: "black",
-              marginLeft: "auto",
-              marginRight: 0,
-              boxShadow: 5,
-              fontSize: 15,
-              fontWeight: 600,
+              display: "flex",
+              flexGrow: 1,
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            TV Shows
-          </Button>
-          <Button
-            key=""
-            variant="contained"
-            color="inherit"
-            onClick={() => handleMenuSelect("/")}
-            sx={{
-              height: 60,
-              borderRadius: 2,
-              color: "black",
-              marginLeft: 2,
-              marginRight: 0,
-              boxShadow: 5,
-              fontSize: 15,
-              fontWeight: 600,
-            }}
-          >
-            Discover
-          </Button>
-          <Button
-            key=""
-            variant="contained"
-            color="inherit"
-            onClick={() => handleMenuSelect("/")}
-            sx={{
-              height: 60,
-              borderRadius: 2,
-              color: "black",
-              marginLeft: 2,
-              marginRight: 0,
-              boxShadow: 5,
-              fontSize: 15,
-              fontWeight: 600,
-            }}
-          >
-            People
-          </Button>
-          <Button
-            key=""
-            variant="contained"
-            color="inherit"
-            onClick={() => handleMenuSelect("/")}
-            sx={{
-              height: 60,
-              borderRadius: 2,
-              color: "black",
-              marginLeft: 2,
-              marginRight: 0,
-              boxShadow: 5,
-              fontSize: 15,
-              fontWeight: 600,
-            }}
-          >
-            Miscellaneous
-          </Button>
-          <Button
-            key=""
-            variant="contained"
-            color="inherit"
-            onClick={() => handleMenuSelect("/")}
-            sx={{
-              height: 60,
-              borderRadius: 2,
-              color: "black",
-              marginLeft: 2,
-              marginRight: 0,
-              boxShadow: 5,
-              fontSize: 15,
-              fontWeight: 600,
-            }}
-          >
-            Account
-          </Button>
+            <Button
+              variant="text"
+              color="inherit"
+              onClick={() => handleMenuSelect("/")}
+              startIcon={
+                location.pathname == "/" ? <TheaterComedyIcon /> : <MovieIcon />
+              }
+              sx={headerButtonSx}
+            >
+              TV Shows
+            </Button>
+            <Button
+              key=""
+              variant="text"
+              color="inherit"
+              onClick={() => handleMenuSelect("/")}
+              startIcon={<ArrowDropDownCircleIcon />}
+              sx={headerButtonSx}
+            >
+              Discover
+            </Button>
+            <Button
+              key=""
+              variant="text"
+              color="inherit"
+              onClick={() => handleMenuSelect("/")}
+              startIcon={<PeopleIcon />}
+              sx={headerButtonSx}
+            >
+              People
+            </Button>
+            <Button
+              key=""
+              variant="text"
+              color="inherit"
+              onClick={() => handleMenuSelect("/")}
+              startIcon={<MiscellaneousServicesIcon />}
+              sx={headerButtonSx}
+            >
+              Misc.
+            </Button>
+            <IconButton
+              key=""
+              color="inherit"
+              onClick={() => handleMenuSelect("/")}
+              sx={headerButtonSx}
+            >
+              <AccountCircleIcon sx={{ color: "white", fontSize: 50 }} />
+            </IconButton>
+          </Toolbar>
         </Toolbar>
       </AppBar>
       <Offset />

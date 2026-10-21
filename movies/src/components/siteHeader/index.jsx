@@ -29,6 +29,8 @@ import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Check from "@mui/icons-material/Check";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
@@ -71,12 +73,17 @@ const SiteHeader = () => {
   ];
 
   const handleDiscoverMenuSelect = (discoverType) => {
-    setAnchorEl(null);
+    setAnchorDisc(null);
     let start = "/movies";
     if (location.pathname.startsWith("/shows")) start = "/shows";
     changeDiscoverState(discoverType);
     console.log(constructPath(start, discoverType));
     navigate(constructPath(start, discoverType));
+  };
+
+  const handleAccMenuSelect = (url) => {
+    setAnchorAcc(null);
+    navigate(url);
   };
 
   const handleMenuMisc = (event) => {
@@ -258,14 +265,12 @@ const SiteHeader = () => {
               open={openMisc}
             >
               <MenuItem>
-                {" "}
                 <ListItemIcon>
                   <ShuffleIcon />
                 </ListItemIcon>
                 I'm Feeling Lucky
               </MenuItem>
               <MenuItem>
-                {" "}
                 <ListItemIcon>
                   <QuestionMarkIcon />
                 </ListItemIcon>
@@ -273,7 +278,6 @@ const SiteHeader = () => {
               </MenuItem>
             </Menu>
             <IconButton
-              key=""
               color="inherit"
               sx={headerButtonSx}
               onClick={handleMenuAcc}
@@ -286,12 +290,17 @@ const SiteHeader = () => {
               onClose={handleCloseAcc}
               open={openAcc}
             >
-              <MenuItem>
-                {" "}
+              <MenuItem onClick={() => handleAccMenuSelect("/favorites")}>
                 <ListItemIcon>
-                  <ShuffleIcon />
+                  <FavoriteIcon />
                 </ListItemIcon>
-                I'm Feeling Lucky
+                Favorites
+              </MenuItem>
+              <MenuItem onClick={() => handleAccMenuSelect("/watchlist")}>
+                <ListItemIcon>
+                  <SubscriptionsIcon />
+                </ListItemIcon>
+                Watchlist
               </MenuItem>
             </Menu>
           </Toolbar>

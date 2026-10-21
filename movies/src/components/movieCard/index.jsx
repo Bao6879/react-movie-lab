@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -15,9 +15,35 @@ import { Link } from "react-router";
 import Avatar from "@mui/material/Avatar";
 import { useContext } from "react";
 import { MoviesContext } from "../../contexts/moviesContext";
+import { getMovieImages } from "../../api/tmdb-api";
+import { useQuery } from "@tanstack/react-query";
+import Spinner from "../spinner";
 
 export default function MovieCard({ movie, action }) {
   const { favorites, addToFavorites } = useContext(MoviesContext);
+  const [currentPoster, setCurrentPoster] = useState(0);
+
+  useEffect(() => {
+    //On render
+    setInterval(() => {
+      setCurrentPoster((prev) => (prev + 1) % 3);
+    }, 5000);
+
+    return () => clearInterval();
+  }, []);
+  const { data, error, isPending, isError } = useQuery({
+    queryKey: ["images", { id: movie.id }],
+    queryFn: getMovieImages,
+  });
+
+  if (isPending) {
+    return <Spinner />;
+  }
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
+  const posterUrl = `https://image.tmdb.org/t/p/w500/${data.posters[currentPoster].file_path}`;
 
   if (favorites.find((id) => id === movie.id)) {
     movie.favorite = true;
@@ -32,7 +58,7 @@ export default function MovieCard({ movie, action }) {
 
   return (
     <Card>
-      <CardHeader
+      {/* <CardHeader
         avatar={
           movie.favorite ? (
             <Avatar sx={{ backgroundColor: "red" }}>
@@ -45,16 +71,9 @@ export default function MovieCard({ movie, action }) {
             {movie.title}{" "}
           </Typography>
         }
-      />
+      /> */}
 
-      <CardMedia
-        sx={{ height: 500 }}
-        image={
-          movie.poster_path
-            ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-            : img
-        }
-      />
+      <CardMedia sx={{ height: 500 }} image={posterUrl} />
       <CardContent>
         <Grid container>
           <Grid size={{ xs: 6 }}>

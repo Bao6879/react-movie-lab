@@ -19,6 +19,7 @@ import { getMovieImages } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
 import { dateFormatter } from "../../util";
 import Spinner from "../spinner";
+import Box from "@mui/material/Box";
 
 export default function MovieCard({ movie, action }) {
   const { favorites, addToFavorites } = useContext(MoviesContext);
@@ -84,7 +85,11 @@ export default function MovieCard({ movie, action }) {
         }
         action={action(movie)}
         title={
-          <Typography variant="h5" component="p">
+          <Typography
+            variant="h6"
+            component="p"
+            sx={{ textAlign: "center", fontWeight: "bolder" }}
+          >
             {movie.title}
           </Typography>
         }
@@ -93,14 +98,15 @@ export default function MovieCard({ movie, action }) {
         <CardMedia sx={{ height: 500 }} image={posterUrl} />
       </Link>
       <CardContent>
-        <Grid container>
-          <Grid size={{ xs: 6 }}>
-            <Typography variant="h6" component="p">
-              <CalendarIcon fontSize="small" />
-              {dateFormatter(movie.release_date)}
-            </Typography>
-          </Grid>
-        </Grid>
+        <Box>
+          <Typography
+            variant="caption"
+            component="p"
+            sx={{ fontStyle: "italic", fontSize: 15, textAlign: "center" }}
+          >
+            {dateFormatter(movie.release_date)}
+          </Typography>
+        </Box>
       </CardContent>
     </Card>
   );

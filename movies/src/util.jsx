@@ -9,6 +9,10 @@ export function excerpt(string) {
 
 export function dateFormatter(string) {
   const date = new Date(string);
-  console.log(date);
-  return date.toLocaleDateString();
+
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 }

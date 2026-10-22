@@ -21,8 +21,10 @@ function MovieListPageTemplate({ movies, title, action }) {
   const [ageRatingNotSelected, setAgeRatingNotSelected] = useState([]);
   const [ratingValue, setRatingValue] = useState([0, 10]);
   const [runtimeValue, setRuntimeValue] = useState([0, 390]);
-  const [dateFrom, setDateFrom] = useState("1900-01-01");
-  const [dateTo, setDateTo] = useState("2050-01-01");
+  const [releaseDateRange, setReleaseDateRange] = useState([
+    "1900-01-01",
+    "2050-01-01",
+  ]);
   const [sortDirection, setSortDirection] = useState(1);
   const [sortCriteria, setSortCriteria] = useState(0);
   const { searchValue, changeSearchValue } = useContext(MoviesContext);
@@ -54,7 +56,10 @@ function MovieListPageTemplate({ movies, title, action }) {
       })
       .filter((m) => {
         //Release Date
-        return m.release_date >= dateFrom && m.release_date <= dateTo;
+        return (
+          m.release_date >= releaseDateRange[0] &&
+          m.release_date <= releaseDateRange[1]
+        );
       });
     console.log(m);
     let direction = 1; //Ascending
@@ -110,11 +115,8 @@ function MovieListPageTemplate({ movies, title, action }) {
       case "runtime":
         setRuntimeValue(value);
         break;
-      case "dateFrom":
-        setDateFrom(value);
-        break;
-      case "dateTo":
-        setDateTo(value);
+      case "releaseDateRange":
+        setReleaseDateRange(value);
         break;
     }
   };
@@ -195,8 +197,7 @@ function MovieListPageTemplate({ movies, title, action }) {
             ageRatingNotSelected={ageRatingNotSelected}
             ratingValue={ratingValue}
             runtimeValue={runtimeValue}
-            dateFrom={dateFrom}
-            dateTo={dateTo}
+            releaseDateRange={releaseDateRange}
           />
         </Grid>
         <Grid container size={{ xs: 12, md: 10 }}>

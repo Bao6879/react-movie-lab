@@ -1,36 +1,36 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+
 import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import MenuIcon from "@mui/icons-material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import Box from "@mui/material/Box";
-import tmpImg from "../../images/pexels-dziana-hasanbekava-5480827.jpg";
-import { useNavigate } from "react-router";
-import { styled } from "@mui/material/styles";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
-import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
-import MovieIcon from "@mui/icons-material/Movie";
-import { useLocation } from "react-router";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-import PeopleIcon from "@mui/icons-material/People";
-import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices";
-import { MoviesContext } from "../../contexts/moviesContext";
-import { useContext } from "react";
-import ShuffleIcon from "@mui/icons-material/Shuffle";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import Check from "@mui/icons-material/Check";
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
+import Toolbar from "@mui/material/Toolbar";
+import { styled } from "@mui/material/styles";
+
+import {
+  AccountCircle as AccountCircleIcon,
+  ArrowDropDownCircle as ArrowDropDownCircleIcon,
+  Check,
+  Favorite as FavoriteIcon,
+  MiscellaneousServices as MiscellaneousServicesIcon,
+  Movie as MovieIcon,
+  People as PeopleIcon,
+  QuestionMark as QuestionMarkIcon,
+  Search as SearchIcon,
+  Settings as SettingsIcon,
+  Shuffle as ShuffleIcon,
+  Subscriptions as SubscriptionsIcon,
+  TheaterComedy as TheaterComedyIcon,
+} from "@mui/icons-material";
+
+import { MoviesContext } from "../../contexts/moviesContext";
+import tmpImg from "../../images/pexels-dziana-hasanbekava-5480827.jpg";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
@@ -44,9 +44,6 @@ const SiteHeader = () => {
   const openMisc = Boolean(anchorMisc),
     openDisc = Boolean(anchorDisc),
     openAcc = Boolean(anchorAcc);
-
-  const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const navigate = useNavigate();
 
@@ -205,7 +202,7 @@ const SiteHeader = () => {
               }}
               sx={headerButtonSx}
             >
-              TV Shows
+              {location.pathname.startsWith("/movies") ? "TV Shows" : "Movies"}
             </Button>
             <Button
               id="discoverSelect"
@@ -306,6 +303,12 @@ const SiteHeader = () => {
                   <SubscriptionsIcon />
                 </ListItemIcon>
                 Watchlist
+              </MenuItem>
+              <MenuItem onClick={() => handleAccMenuSelect("/settings")}>
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                Settings
               </MenuItem>
             </Menu>
           </Toolbar>

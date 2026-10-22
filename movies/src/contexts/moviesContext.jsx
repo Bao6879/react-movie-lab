@@ -7,6 +7,7 @@ const MoviesContextProvider = (props) => {
   const [myReviews, setMyReviews] = useState({});
   const [watchlist, setWatchlist] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [reviewCount, setReviewCount] = useState(0); //Will be used for the account stuff later.
   let [discoverState, setDiscoverState] = useState(1);
 
   const addToFavorites = (movie) => {
@@ -37,6 +38,10 @@ const MoviesContextProvider = (props) => {
     setDiscoverState(number);
   };
 
+  const changeReviewCount = (number) => {
+    setReviewCount(number);
+  };
+
   const changeSearchValue = (value) => {
     setSearchValue(value);
   };
@@ -56,6 +61,7 @@ const MoviesContextProvider = (props) => {
         watchlist,
         discoverState,
         searchValue,
+        reviewCount,
         addToFavorites,
         addToWatchlist,
         removeFromFavorites,
@@ -63,6 +69,7 @@ const MoviesContextProvider = (props) => {
         addReview,
         changeDiscoverState,
         changeSearchValue,
+        changeReviewCount,
       }}
     >
       {props.children}

@@ -86,7 +86,7 @@ export default function MovieCard({ movie, action }) {
         action={action(movie)}
         title={
           <Typography
-            variant="h6"
+            variant="body1"
             component="p"
             sx={{ textAlign: "center", fontWeight: "bolder" }}
           >

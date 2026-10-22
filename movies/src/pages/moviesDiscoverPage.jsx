@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Spinner from "../components/spinner";
 import MovieActions from "../components/movieActions";
 
-const HomePage = (props) => {
+const MoviesDiscoverPage = (props) => {
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["discover"],
     queryFn: getMovies,
@@ -35,4 +35,4 @@ const HomePage = (props) => {
     />
   );
 };
-export default HomePage;
+export default MoviesDiscoverPage;

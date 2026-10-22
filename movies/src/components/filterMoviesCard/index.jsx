@@ -34,7 +34,7 @@ const formControl = {
 };
 
 export default function FilterMoviesCard(props) {
-  const { ageRatingNotSelected, ratingValue, runtimeValue, dateFrom, dateTo } =
+  const { ageRatingNotSelected, ratingValue, runtimeValue, releaseDateRange } =
     props;
   const {
     data: genreData,
@@ -117,16 +117,22 @@ export default function FilterMoviesCard(props) {
           <Typography variant="body1">By Release Date:</Typography>
           <TextField
             type="date"
-            value={dateFrom}
+            value={releaseDateRange[0]}
             onChange={(event) => {
-              handleChange(event, "dateFrom", event.target.value);
+              handleChange(event, "releaseDateRange", [
+                event.target.value,
+                releaseDateRange[1],
+              ]);
             }}
           />
           <TextField
             type="date"
-            value={dateTo}
+            value={releaseDateRange[1]}
             onChange={(event) => {
-              handleChange(event, "dateTo", event.target.value);
+              handleChange(event, "releaseDateRange", [
+                releaseDateRange[0],
+                event.target.value,
+              ]);
             }}
           />
           <Divider />

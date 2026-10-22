@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -12,7 +11,6 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import { styled } from "@mui/material/styles";
-
 import {
   AccountCircle as AccountCircleIcon,
   ArrowDropDownCircle as ArrowDropDownCircleIcon,

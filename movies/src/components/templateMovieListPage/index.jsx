@@ -17,6 +17,12 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 function MovieListPageTemplate({ movies, title, action }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
+  const [seenFilter, setSeenFilter] = useState("all");
+  const [ageRatingNotSelected, setAgeRatingNotSelected] = useState([]);
+  const [ratingValue, setRatingValue] = useState([0, 10]);
+  const [runtimeValue, setRuntimeValue] = useState([0, 390]);
+  const [dateFrom, setDateFrom] = useState("1900-01-01");
+  const [dateTo, setDateTo] = useState("2050-01-01");
   const [sortDirection, setSortDirection] = useState(1);
   const [sortCriteria, setSortCriteria] = useState(0);
   const { searchValue, changeSearchValue } = useContext(MoviesContext);
@@ -26,13 +32,31 @@ function MovieListPageTemplate({ movies, title, action }) {
   const getDisplayedMovies = (movies) => {
     let m = movies
       .filter((m) => {
+        //Name
         return (
           m.title.toLowerCase().startsWith(searchValue.toLowerCase()) !== false
         );
       })
       .filter((m) => {
+        //Genre
         return genreId > 0 ? m.genre_ids.includes(genreId) : true;
+      })
+      .filter((m) => {
+        //Rating
+        return (
+          m.vote_average >= ratingValue[0] && m.vote_average <= ratingValue[1]
+        );
+      })
+      .filter((m) => {
+        //Runtime
+        return true;
+        // return m.runtime >= runtimeValue[0] && m.runtime <= runtimeValue[1];
+      })
+      .filter((m) => {
+        //Release Date
+        return m.release_date >= dateFrom && m.release_date <= dateTo;
       });
+    console.log(m);
     let direction = 1; //Ascending
     if (sortDirection === 0) direction = -1;
     switch (sortCriteria) {
@@ -63,14 +87,42 @@ function MovieListPageTemplate({ movies, title, action }) {
   };
 
   const handleChange = (type, value) => {
-    if (type === "name") setNameFilter(value);
-    else setGenreFilter(value);
+    switch (type) {
+      case "name":
+        setNameFilter(value);
+        break;
+      case "genre":
+        setGenreFilter(value);
+        break;
+      case "seen":
+        setSeenFilter(value);
+        break;
+      case "age":
+        setAgeRatingNotSelected((previous) =>
+          value.checked
+            ? previous.filter((rating) => rating !== value.value)
+            : [...previous, value.value],
+        );
+        break;
+      case "rating":
+        setRatingValue(value);
+        break;
+      case "runtime":
+        setRuntimeValue(value);
+        break;
+      case "dateFrom":
+        setDateFrom(value);
+        break;
+      case "dateTo":
+        setDateTo(value);
+        break;
+    }
   };
 
   let displayedMovies = getDisplayedMovies(movies);
 
   return (
-    <Grid container>
+    <Grid container size={12}>
       <Grid size={12} sx={{ marginTop: 3, display: "flex" }}>
         <Typography variant="h5" sx={{ marginLeft: 5 }}>
           Sorting Options:
@@ -130,7 +182,7 @@ function MovieListPageTemplate({ movies, title, action }) {
           sx={{ marginLeft: 5 }}
         />
       </Grid>
-      <Grid container>
+      <Grid container size={12}>
         <Grid
           size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
           sx={{ padding: "20px" }}
@@ -139,9 +191,15 @@ function MovieListPageTemplate({ movies, title, action }) {
             onUserInput={handleChange}
             titleFilter={nameFilter}
             genreFilter={genreFilter}
+            seenFilter={seenFilter}
+            ageRatingNotSelected={ageRatingNotSelected}
+            ratingValue={ratingValue}
+            runtimeValue={runtimeValue}
+            dateFrom={dateFrom}
+            dateTo={dateTo}
           />
         </Grid>
-        <Grid container size={{ xs: 12, md: 9 }}>
+        <Grid container size={{ xs: 12, md: 10 }}>
           <MovieList action={action} movies={displayedMovies}></MovieList>
         </Grid>
       </Grid>

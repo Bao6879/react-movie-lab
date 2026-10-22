@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../spinner";
 import Card from "@mui/material/Card";
@@ -34,11 +34,8 @@ const formControl = {
 };
 
 export default function FilterMoviesCard(props) {
-  const [ageRatingNotSelected, setAgeRatingNotSelected] = useState([]);
-  const [ratingValue, setRatingValue] = useState([0, 10]);
-  const [runtimeValue, setRuntimeValue] = useState([0, 390]);
-  const [dateFrom, setDateFrom] = useState("1900-01-01");
-  const [dateTo, setDateTo] = useState("2050-01-01");
+  const { ageRatingNotSelected, ratingValue, runtimeValue, dateFrom, dateTo } =
+    props;
   const {
     data: genreData,
     error: genreError,
@@ -79,7 +76,6 @@ export default function FilterMoviesCard(props) {
   for (let i = 0; i <= 300; i += 30) runtimeMarks.push({ value: i, label: i });
 
   const handleChange = (e, type, value) => {
-    e.preventDefault();
     props.onUserInput(type, value);
   };
 
@@ -89,12 +85,7 @@ export default function FilterMoviesCard(props) {
 
   const handleAgeRatingChange = (e) => {
     const { value, checked } = e.target;
-    setAgeRatingNotSelected((previous) =>
-      checked
-        ? previous.filter((rating) => rating !== value)
-        : [...previous, value],
-    );
-    handleChange(e, "age", ageRatingNotSelected);
+    handleChange(e, "age", { value, checked });
   };
 
   return (
@@ -106,7 +97,7 @@ export default function FilterMoviesCard(props) {
         <Stack spacing={2} useFlexGap sx={{ padding: 2 }}>
           <Typography variant="body1">By Seen:</Typography>
           <RadioGroup
-            defaultValue="all"
+            value={props.seenFilter}
             name="radio-buttons-group"
             onChange={(e) => handleChange(e, "seen", e.target.value)}
           >
@@ -128,16 +119,14 @@ export default function FilterMoviesCard(props) {
             type="date"
             value={dateFrom}
             onChange={(event) => {
-              setDateFrom(event.target.value);
-              handleChange(e, "dateFrom", event.target.value);
+              handleChange(event, "dateFrom", event.target.value);
             }}
           />
           <TextField
             type="date"
             value={dateTo}
             onChange={(event) => {
-              setDateTo(event.target.value);
-              handleChange(e, "dateTo", event.target.value);
+              handleChange(event, "dateTo", event.target.value);
             }}
           />
           <Divider />
@@ -147,7 +136,6 @@ export default function FilterMoviesCard(props) {
             <Select
               labelId="genre-label"
               id="genre-select"
-              defaultValue=""
               value={props.genreFilter}
               onChange={handleGenreChange}
             >
@@ -161,6 +149,9 @@ export default function FilterMoviesCard(props) {
             </Select>
           </FormControl>
           <Divider />
+          <Typography variant="body1">
+            By Age Rating (Which doesn't work rn):
+          </Typography>
           <FormControl>
             {ageRatings.map((rating) => {
               return (
@@ -189,12 +180,13 @@ export default function FilterMoviesCard(props) {
             min={0}
             max={10}
             onChange={(event, newValue) => {
-              setRatingValue(newValue);
               handleChange(event, "rating", newValue);
             }}
           />
           <Divider />
-          <Typography variant="body1">By Runtime:</Typography>
+          <Typography variant="body1">
+            By Runtime (Which also doesn't work rn):
+          </Typography>
           <Slider
             value={runtimeValue}
             step={10}
@@ -202,7 +194,6 @@ export default function FilterMoviesCard(props) {
             min={0}
             max={300}
             onChange={(event, newValue) => {
-              setRuntimeValue(newValue);
               handleChange(event, "runtime", newValue);
             }}
           />

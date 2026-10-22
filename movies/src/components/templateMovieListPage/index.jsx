@@ -124,14 +124,13 @@ function MovieListPageTemplate({ movies, title, action }) {
           sx={{ marginLeft: 5 }}
         />
       </Grid>
-      <Grid container sx={{ flex: "1 1 500px" }}>
-        {/* <Grid
-          key="find"
+      <Grid container>
+        <Grid
           size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
           sx={{ padding: "20px" }}
         >
           <FilterCard />
-        </Grid> */}
+        </Grid>
         <MovieList action={action} movies={displayedMovies}></MovieList>
       </Grid>
     </Grid>

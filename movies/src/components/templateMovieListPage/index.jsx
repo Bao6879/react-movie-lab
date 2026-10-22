@@ -21,14 +21,18 @@ function MovieListPageTemplate({ movies, title, action }) {
   const [sortCriteria, setSortCriteria] = useState(0);
   const { searchValue, changeSearchValue } = useContext(MoviesContext);
 
-  // const genreId = Number(genreFilter);
+  const genreId = Number(genreFilter);
 
   const getDisplayedMovies = (movies) => {
-    let m = movies.filter((m) => {
-      return (
-        m.title.toLowerCase().startsWith(searchValue.toLowerCase()) !== false
-      );
-    });
+    let m = movies
+      .filter((m) => {
+        return (
+          m.title.toLowerCase().startsWith(searchValue.toLowerCase()) !== false
+        );
+      })
+      .filter((m) => {
+        return genreId > 0 ? m.genre_ids.includes(genreId) : true;
+      });
     let direction = 1; //Ascending
     if (sortDirection === 0) direction = -1;
     switch (sortCriteria) {
@@ -58,10 +62,12 @@ function MovieListPageTemplate({ movies, title, action }) {
     }
   };
 
+  const handleChange = (type, value) => {
+    if (type === "name") setNameFilter(value);
+    else setGenreFilter(value);
+  };
+
   let displayedMovies = getDisplayedMovies(movies);
-  // .filter((m) => {
-  //   return genreId > 0 ? m.genre_ids.includes(genreId) : true;
-  // });
 
   return (
     <Grid container>
@@ -129,7 +135,11 @@ function MovieListPageTemplate({ movies, title, action }) {
           size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 2 }}
           sx={{ padding: "20px" }}
         >
-          <FilterCard />
+          <FilterCard
+            onUserInput={handleChange}
+            titleFilter={nameFilter}
+            genreFilter={genreFilter}
+          />
         </Grid>
         <Grid container size={{ xs: 12, md: 9 }}>
           <MovieList action={action} movies={displayedMovies}></MovieList>

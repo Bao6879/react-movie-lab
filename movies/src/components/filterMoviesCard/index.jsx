@@ -83,12 +83,18 @@ export default function FilterMoviesCard(props) {
     props.onUserInput(type, value);
   };
 
-  const handleTextChange = (e, props) => {
-    handleChange(e, "name", e.target.value);
-  };
-
   const handleGenreChange = (e) => {
     handleChange(e, "genre", e.target.value);
+  };
+
+  const handleAgeRatingChange = (e) => {
+    const { value, checked } = e.target;
+    setAgeRatingNotSelected((previous) =>
+      checked
+        ? previous.filter((rating) => rating !== value)
+        : [...previous, value],
+    );
+    handleChange(e, "age", ageRatingNotSelected);
   };
 
   return (
@@ -99,7 +105,11 @@ export default function FilterMoviesCard(props) {
       <AccordionDetails>
         <Stack spacing={2} useFlexGap sx={{ padding: 2 }}>
           <Typography variant="body1">By Seen:</Typography>
-          <RadioGroup defaultValue="all" name="radio-buttons-group">
+          <RadioGroup
+            defaultValue="all"
+            name="radio-buttons-group"
+            onChange={(e) => handleChange(e, "seen", e.target.value)}
+          >
             <FormControlLabel value="all" control={<Radio />} label="All" />
             <FormControlLabel
               value="seen"
@@ -117,14 +127,19 @@ export default function FilterMoviesCard(props) {
           <TextField
             type="date"
             value={dateFrom}
-            onChange={(event) => setDateFrom(event.target.value)}
+            onChange={(event) => {
+              setDateFrom(event.target.value);
+              handleChange(e, "dateFrom", event.target.value);
+            }}
           />
           <TextField
             type="date"
             value={dateTo}
-            onChange={(event) => setDateTo(event.target.value)}
+            onChange={(event) => {
+              setDateTo(event.target.value);
+              handleChange(e, "dateTo", event.target.value);
+            }}
           />
-
           <Divider />
           <Typography variant="body1">By Genre:</Typography>
           <FormControl sx={{ ...formControl }}>
@@ -150,11 +165,16 @@ export default function FilterMoviesCard(props) {
             {ageRatings.map((rating) => {
               return (
                 <FormControlLabel
-                  control={<Checkbox defaultChecked />}
-                  label={rating.certification}
                   key={rating.certification}
-                  value={
-                    rating.certification in ageRatingNotSelected ? false : true
+                  label={rating.certification}
+                  control={
+                    <Checkbox
+                      value={rating.certification}
+                      checked={
+                        !ageRatingNotSelected.includes(rating.certification)
+                      }
+                      onChange={handleAgeRatingChange}
+                    />
                   }
                 />
               );
@@ -170,6 +190,7 @@ export default function FilterMoviesCard(props) {
             max={10}
             onChange={(event, newValue) => {
               setRatingValue(newValue);
+              handleChange(event, "rating", newValue);
             }}
           />
           <Divider />
@@ -182,6 +203,7 @@ export default function FilterMoviesCard(props) {
             max={300}
             onChange={(event, newValue) => {
               setRuntimeValue(newValue);
+              handleChange(event, "runtime", newValue);
             }}
           />
         </Stack>

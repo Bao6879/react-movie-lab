@@ -3,24 +3,25 @@ import Header from "../headerMovieList";
 import FilterCard from "../filterMoviesCard";
 import MovieList from "../movieList";
 import Grid from "@mui/material/Grid";
+import { MoviesContext } from "../../contexts/moviesContext";
+import { useContext } from "react";
 
 function MovieListPageTemplate({ movies, title, action }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
-  const genreId = Number(genreFilter);
+  const { searchValue, changeSearchValue } = useContext(MoviesContext);
 
-  let displayedMovies = movies
-    .filter((m) => {
-      return m.title.toLowerCase().search(nameFilter.toLowerCase()) !== -1;
-    })
-    .filter((m) => {
-      return genreId > 0 ? m.genre_ids.includes(genreId) : true;
-    });
+  // const genreId = Number(genreFilter);
 
-  const handleChange = (type, value) => {
-    if (type === "name") setNameFilter(value);
-    else setGenreFilter(value);
-  };
+  console.log(searchValue);
+  let displayedMovies = movies.filter((m) => {
+    return (
+      m.title.toLowerCase().startsWith(searchValue.toLowerCase()) !== false
+    );
+  });
+  // .filter((m) => {
+  //   return genreId > 0 ? m.genre_ids.includes(genreId) : true;
+  // });
 
   return (
     <Grid container>

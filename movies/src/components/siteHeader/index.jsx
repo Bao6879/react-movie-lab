@@ -39,6 +39,7 @@ const SiteHeader = () => {
   const [anchorMisc, setAnchorMisc] = useState(null);
   const [anchorAcc, setAnchorAcc] = useState(null);
   const { discoverState, changeDiscoverState } = useContext(MoviesContext);
+  const { searchValue, changeSearchValue } = useContext(MoviesContext);
   const location = useLocation();
   const openMisc = Boolean(anchorMisc),
     openDisc = Boolean(anchorDisc),
@@ -48,6 +49,10 @@ const SiteHeader = () => {
   // const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const navigate = useNavigate();
+
+  const handleTextChange = (event) => {
+    changeSearchValue(event.target.value);
+  };
 
   const constructPath = (url, state) => {
     if (state == 0) state = discoverState;
@@ -171,8 +176,8 @@ const SiteHeader = () => {
               boxShadow: 5,
               borderRadius: 3,
             }}
-            // value={props.titleFilter}
-            // onChange={handleTextChange}
+            value={searchValue}
+            onChange={handleTextChange}
           />
           <Toolbar
             sx={{

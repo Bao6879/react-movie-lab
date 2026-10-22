@@ -131,7 +131,9 @@ function MovieListPageTemplate({ movies, title, action }) {
         >
           <FilterCard />
         </Grid>
-        <MovieList action={action} movies={displayedMovies}></MovieList>
+        <Grid container size={{ xs: 12, md: 9 }}>
+          <MovieList action={action} movies={displayedMovies}></MovieList>
+        </Grid>
       </Grid>
     </Grid>
   );

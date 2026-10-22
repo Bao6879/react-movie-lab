@@ -37,6 +37,8 @@ export default function FilterMoviesCard(props) {
   const [ageRatingNotSelected, setAgeRatingNotSelected] = useState([]);
   const [ratingValue, setRatingValue] = useState([0, 10]);
   const [runtimeValue, setRuntimeValue] = useState([0, 390]);
+  const [dateFrom, setDateFrom] = useState("1900-01-01");
+  const [dateTo, setDateTo] = useState("2050-01-01");
   const {
     data: genreData,
     error: genreError,
@@ -92,7 +94,7 @@ export default function FilterMoviesCard(props) {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ArrowDropDownIcon />}>
-        Filters
+        <Typography variant="h5">Filters</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing={2} useFlexGap sx={{ padding: 2 }}>
@@ -112,7 +114,16 @@ export default function FilterMoviesCard(props) {
           </RadioGroup>
           <Divider />
           <Typography variant="body1">By Release Date:</Typography>
-          <FormControl sx={{ ...formControl }}></FormControl>
+          <TextField
+            type="date"
+            value={dateFrom}
+            onChange={(event) => setDateFrom(event.target.value)}
+          />
+          <TextField
+            type="date"
+            value={dateTo}
+            onChange={(event) => setDateTo(event.target.value)}
+          />
 
           <Divider />
           <Typography variant="body1">By Genre:</Typography>
@@ -157,7 +168,9 @@ export default function FilterMoviesCard(props) {
             marks={valueMarks}
             min={0}
             max={10}
-            // onChange={handleChange}
+            onChange={(event, newValue) => {
+              setRatingValue(newValue);
+            }}
           />
           <Divider />
           <Typography variant="body1">By Runtime:</Typography>
@@ -167,7 +180,9 @@ export default function FilterMoviesCard(props) {
             marks={runtimeMarks}
             min={0}
             max={300}
-            // onChange={handleChange}
+            onChange={(event, newValue) => {
+              setRuntimeValue(newValue);
+            }}
           />
         </Stack>
       </AccordionDetails>

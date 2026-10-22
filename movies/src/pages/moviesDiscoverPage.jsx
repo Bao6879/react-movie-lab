@@ -6,7 +6,7 @@ import MovieActions from "../components/movieActions";
 
 const MoviesDiscoverPage = (props) => {
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ["discover"],
+    queryKey: ["discoverMovies"],
     queryFn: getMovies,
   });
 

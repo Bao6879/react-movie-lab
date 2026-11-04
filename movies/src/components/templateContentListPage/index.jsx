@@ -36,16 +36,19 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
       })
       .filter((m) => {
         //Genre
+        if (m.type === "person") return true;
         return genreId > 0 ? m.genre_ids.includes(genreId) : true;
       })
       .filter((m) => {
         //Rating
+        if (m.type === "person") return true;
         return (
           m.vote_average >= ratingValue[0] && m.vote_average <= ratingValue[1]
         );
       })
       .filter((m) => {
         //Release Date
+        if (m.type === "person") return true;
         return m.date >= releaseDateRange[0] && m.date <= releaseDateRange[1];
       });
     console.log(m);

@@ -74,7 +74,9 @@ export default function FilterCard(props) {
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing={2} useFlexGap sx={{ padding: 2 }}>
-          <Typography variant="body1">By Seen:</Typography>
+          <Typography variant="body1">
+            By Seen: (Does nothing for people)
+          </Typography>
           <RadioGroup
             value={props.seenFilter}
             name="radio-buttons-group"

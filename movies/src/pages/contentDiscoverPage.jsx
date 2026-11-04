@@ -15,7 +15,7 @@ const ContentDiscoverPage = (props) => {
   if (section === "shows") {
     type = "tv";
     getContent = getShows;
-  } else {
+  } else if (section === "people") {
     type = "person";
     getContent = getPeople;
   }

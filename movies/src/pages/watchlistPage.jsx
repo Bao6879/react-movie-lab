@@ -37,7 +37,6 @@ const watchlistPage = () => {
 
   return (
     <PageTemplate
-      title="Watchlist"
       items={movies}
       action={(movie) => {
         return (

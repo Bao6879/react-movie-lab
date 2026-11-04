@@ -13,7 +13,7 @@ import StarIcon from "@mui/icons-material/Star";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 
-function ContentListPageTemplate({ items, title, action, type = "movie" }) {
+function ContentListPageTemplate({ items, action, type = "movie" }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const [seenFilter, setSeenFilter] = useState("all");

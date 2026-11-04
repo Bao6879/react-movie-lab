@@ -1,8 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Navigate, Routes } from "react-router";
-import MoviesDiscoverPage from "./pages/moviesDiscoverPage";
-import ShowsDiscoverPage from "./pages/showsDiscoverPage";
+import ContentDiscoverPage from "./pages/contentDiscoverPage";
 import MoviePage from "./pages/movieDetailsPage";
 import FavoriteMoviesPage from "./pages/favoriteMoviesPage";
 import MovieReviewPage from "./pages/movieReviewPage";
@@ -36,15 +35,17 @@ const App = () => {
             <Route path="/movies/:id" element={<MoviePage />} />
             <Route path="/reviews/form" element={<AddMovieReviewPage />} />
 
-            <Route path="/movies/discover" element={<MoviesDiscoverPage />} />
-            <Route path="/movies/playing" element={<MoviesDiscoverPage />} />
-            <Route path="/movies/top" element={<MoviesDiscoverPage />} />
-            <Route path="/movies/upcoming" element={<MoviesDiscoverPage />} />
+            <Route path="/movies/discover" element={<ContentDiscoverPage />} />
+            <Route path="/movies/playing" element={<ContentDiscoverPage />} />
+            <Route path="/movies/top" element={<ContentDiscoverPage />} />
+            <Route path="/movies/upcoming" element={<ContentDiscoverPage />} />
 
-            <Route path="/shows/discover" element={<ShowsDiscoverPage />} />
-            <Route path="/shows/playing" element={<ShowsDiscoverPage />} />
-            <Route path="/shows/top" element={<ShowsDiscoverPage />} />
-            <Route path="/shows/upcoming" element={<ShowsDiscoverPage />} />
+            <Route path="/shows/discover" element={<ContentDiscoverPage />} />
+            <Route path="/shows/playing" element={<ContentDiscoverPage />} />
+            <Route path="/shows/top" element={<ContentDiscoverPage />} />
+            <Route path="/shows/upcoming" element={<ContentDiscoverPage />} />
+
+            <Route path="/people" element={<ContentDiscoverPage />} />
             <Route path="*" element={<Navigate to="/movies/discover" />} />
           </Routes>
         </MoviesContextProvider>

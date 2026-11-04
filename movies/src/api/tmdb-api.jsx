@@ -74,6 +74,30 @@ export const getShows = (args) => {
     });
 };
 
+export const getPeople = () => {
+  return fetch(``)
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .then((data) => ({
+      ...data,
+      results: data.results.map((person) => ({
+        ...person,
+        title: person.name,
+        image: person.profile_path,
+        type: "person",
+      })),
+    }))
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export const getMovie = (args) => {
   const [, idPart] = args.queryKey;
   const { id } = idPart;

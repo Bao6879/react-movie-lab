@@ -36,7 +36,6 @@ const FavoriteMoviesPage = () => {
 
   return (
     <PageTemplate
-      title="Favorite Movies"
       items={movies}
       action={(movie) => {
         return (

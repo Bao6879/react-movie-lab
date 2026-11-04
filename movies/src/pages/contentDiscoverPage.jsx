@@ -1,16 +1,28 @@
-import { getMovies } from "../api/tmdb-api";
+import { getMovies, getPeople, getShows } from "../api/tmdb-api";
 import PageTemplate from "../components/templateContentListPage";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../components/spinner";
 import MovieActions from "../components/movieActions";
 import { useLocation } from "react-router";
 
-const MoviesDiscoverPage = (props) => {
+const ContentDiscoverPage = (props) => {
   const location = useLocation();
+  const section = location.pathname.split("/")[1];
   const category = location.pathname.split("/")[2];
+
+  let type = "movie";
+  let getContent = getMovies;
+  if (section === "shows") {
+    type = "tv";
+    getContent = getShows;
+  } else {
+    type = "person";
+    getContent = getPeople;
+  }
+
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ["movies", { category: category }],
-    queryFn: getMovies,
+    queryKey: [section, { category: category }],
+    queryFn: getContent,
   });
 
   if (isPending) {
@@ -21,21 +33,21 @@ const MoviesDiscoverPage = (props) => {
     return <h1>{error.message}</h1>;
   }
 
-  const movies = data.results;
+  const items = data.results;
 
   // Redundant, but necessary to avoid app crashing.
-  const favorites = movies.filter((m) => m.favorite);
+  const favorites = items.filter((m) => m.favorite);
   localStorage.setItem("favorites", JSON.stringify(favorites));
   const addToFavorites = (movieId) => true;
 
   return (
     <PageTemplate
-      title="Discover Movies"
-      items={movies}
+      type={type}
+      items={items}
       action={(movie) => {
         return <MovieActions movie={movie} />;
       }}
     />
   );
 };
-export default MoviesDiscoverPage;
+export default ContentDiscoverPage;

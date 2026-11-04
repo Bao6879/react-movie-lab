@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import Header from "../headerMovieList";
-import FilterCard from "../filterMoviesCard";
-import MovieList from "../movieList";
+import FilterCard from "../filterCard";
+import ContentList from "../contentList";
 import Grid from "@mui/material/Grid";
 import { MoviesContext } from "../../contexts/moviesContext";
 import { useContext } from "react";
@@ -14,7 +13,7 @@ import StarIcon from "@mui/icons-material/Star";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 
-function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
+function ContentListPageTemplate({ items, title, action, type = "movie" }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const [seenFilter, setSeenFilter] = useState("all");
@@ -29,13 +28,11 @@ function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
 
   const genreId = Number(genreFilter);
 
-  const getDisplayedMovies = (movies) => {
-    let m = movies
+  const getDisplayedItems = (items) => {
+    let m = items
       .filter((m) => {
         //Name
-        return (
-          m.title.toLowerCase().startsWith(searchValue.toLowerCase()) !== false
-        );
+        return m.title.toLowerCase().includes(searchValue.toLowerCase());
       })
       .filter((m) => {
         //Genre
@@ -94,7 +91,7 @@ function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
     }
   };
 
-  let displayedMovies = getDisplayedMovies(movies);
+  let displayedItems = getDisplayedItems(items);
 
   return (
     <Grid container size={12}>
@@ -173,10 +170,10 @@ function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
           />
         </Grid>
         <Grid container size={{ xs: 12, md: 10 }}>
-          <MovieList action={action} movies={displayedMovies}></MovieList>
+          <ContentList action={action} items={displayedItems}></ContentList>
         </Grid>
       </Grid>
     </Grid>
   );
 }
-export default MovieListPageTemplate;
+export default ContentListPageTemplate;

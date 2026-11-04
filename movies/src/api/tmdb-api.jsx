@@ -36,9 +36,20 @@ export const getMovies = (args) => {
     });
 };
 
-export const getShows = () => {
+export const getShows = (args) => {
+  const [, categoryPart] = args.queryKey;
+  const { category } = categoryPart;
+
+  let path = "discover/tv";
+  if (category === "playing") {
+    path = "tv/airing_today";
+  } else if (category === "top") {
+    path = "tv/top_rated";
+  } else if (category === "upcoming") {
+    path = "tv/on_the_air";
+  }
   return fetch(
-    `https://api.themoviedb.org/3/discover/tv?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&include_null_first_air_dates=false&page=1`,
+    `https://api.themoviedb.org/3/${path}?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&include_null_first_air_dates=false&page=1`,
   )
     .then((response) => {
       if (!response.ok) {

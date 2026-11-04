@@ -1,12 +1,15 @@
 import { getShows } from "../api/tmdb-api";
-import PageTemplate from "../components/templateMovieListPage";
+import PageTemplate from "../components/templateContentListPage";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../components/spinner";
 import MovieActions from "../components/movieActions";
+import { useLocation } from "react-router";
 
 const ShowsDiscoverPage = (props) => {
+  const location = useLocation();
+  const category = location.pathname.split("/")[2];
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ["discoverShow"],
+    queryKey: ["show", { category: category }],
     queryFn: getShows,
   });
 
@@ -25,7 +28,7 @@ const ShowsDiscoverPage = (props) => {
     <PageTemplate
       title="Discover Shows"
       type="tv"
-      movies={shows}
+      items={shows}
       // action={(shows) => {
       //   return <MovieActions movie={show} />;
       // }}

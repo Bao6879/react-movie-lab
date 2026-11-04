@@ -32,7 +32,7 @@ const formControl = {
   backgroundColor: "rgb(255, 255, 255)",
 };
 
-export default function FilterMoviesCard(props) {
+export default function FilterCard(props) {
   const { ratingValue, releaseDateRange } = props;
   const {
     data: genreData,

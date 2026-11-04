@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import PageTemplate from "../components/templateMovieListPage";
+import PageTemplate from "../components/templateContentListPage";
 import { MoviesContext } from "../contexts/moviesContext";
 import { useQueries } from "@tanstack/react-query";
 import { getMovie } from "../api/tmdb-api";
@@ -38,7 +38,7 @@ const watchlistPage = () => {
   return (
     <PageTemplate
       title="Watchlist"
-      movies={movies}
+      items={movies}
       action={(movie) => {
         return (
           <>

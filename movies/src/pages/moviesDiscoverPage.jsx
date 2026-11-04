@@ -1,5 +1,5 @@
 import { getMovies } from "../api/tmdb-api";
-import PageTemplate from "../components/templateMovieListPage";
+import PageTemplate from "../components/templateContentListPage";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../components/spinner";
 import MovieActions from "../components/movieActions";
@@ -31,7 +31,7 @@ const MoviesDiscoverPage = (props) => {
   return (
     <PageTemplate
       title="Discover Movies"
-      movies={movies}
+      items={movies}
       action={(movie) => {
         return <MovieActions movie={movie} />;
       }}

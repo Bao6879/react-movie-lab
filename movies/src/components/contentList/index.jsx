@@ -3,8 +3,8 @@ import Movie from "../movieCard/";
 import Show from "../showCard/";
 import Grid from "@mui/material/Grid";
 
-const MovieList = (props) => {
-  let cards = props.movies.map((m) =>
+const ContentList = (props) => {
+  let cards = props.items.map((m) =>
     m.type === "movie" ? (
       <Grid
         key={m.id}
@@ -22,4 +22,4 @@ const MovieList = (props) => {
   return cards;
 };
 
-export default MovieList;
+export default ContentList;

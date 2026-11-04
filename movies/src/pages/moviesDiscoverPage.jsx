@@ -1,4 +1,4 @@
-import { getDiscoverMovies, getPlayingMovies } from "../api/tmdb-api";
+import { getMovies } from "../api/tmdb-api";
 import PageTemplate from "../components/templateMovieListPage";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../components/spinner";
@@ -7,13 +7,10 @@ import { useLocation } from "react-router";
 
 const MoviesDiscoverPage = (props) => {
   const location = useLocation();
+  const category = location.pathname.split("/")[2];
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ["movies", location.pathname],
-    queryFn: location.pathname.includes("playing")
-      ? getPlayingMovies
-      : location.pathname.includes("upcoming")
-        ? getUpcomingMovies
-        : getDiscoverMovies,
+    queryKey: ["movies", { category: category }],
+    queryFn: getMovies,
   });
 
   if (isPending) {

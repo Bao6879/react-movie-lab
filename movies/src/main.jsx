@@ -5,7 +5,6 @@ import MoviesDiscoverPage from "./pages/moviesDiscoverPage";
 import ShowsDiscoverPage from "./pages/showsDiscoverPage";
 import MoviePage from "./pages/movieDetailsPage";
 import FavoriteMoviesPage from "./pages/favoriteMoviesPage";
-import UpcomingMoviesPage from "./pages/upcomingMoviesPage";
 import MovieReviewPage from "./pages/movieReviewPage";
 import WatchlistPage from "./pages/watchlistPage";
 import SiteHeader from "./components/siteHeader";
@@ -32,14 +31,20 @@ const App = () => {
           <SiteHeader />
           <Routes>
             <Route path="/favorites" element={<FavoriteMoviesPage />} />
-            <Route path="/movies/upcoming" element={<MoviesDiscoverPage />} />
             <Route path="/watchlist" element={<WatchlistPage />} />
             <Route path="/reviews/:id" element={<MovieReviewPage />} />
             <Route path="/movies/:id" element={<MoviePage />} />
             <Route path="/reviews/form" element={<AddMovieReviewPage />} />
+
             <Route path="/movies/discover" element={<MoviesDiscoverPage />} />
             <Route path="/movies/playing" element={<MoviesDiscoverPage />} />
+            <Route path="/movies/top" element={<MoviesDiscoverPage />} />
+            <Route path="/movies/upcoming" element={<MoviesDiscoverPage />} />
+
             <Route path="/shows/discover" element={<ShowsDiscoverPage />} />
+            <Route path="/shows/playing" element={<ShowsDiscoverPage />} />
+            <Route path="/shows/top" element={<ShowsDiscoverPage />} />
+            <Route path="/shows/upcoming" element={<ShowsDiscoverPage />} />
             <Route path="*" element={<Navigate to="/movies/discover" />} />
           </Routes>
         </MoviesContextProvider>

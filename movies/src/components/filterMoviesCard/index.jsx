@@ -12,7 +12,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import img from "../../images/pexels-dziana-hasanbekava-5480827.jpg";
-import { getGenres, getGenresShows, getAgeRatings } from "../../api/tmdb-api";
+import { getGenres, getGenresShows } from "../../api/tmdb-api";
 import Stack from "@mui/material/Stack";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -24,7 +24,6 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
 
 const formControl = {
@@ -34,8 +33,7 @@ const formControl = {
 };
 
 export default function FilterMoviesCard(props) {
-  const { ageRatingNotSelected, ratingValue, runtimeValue, releaseDateRange } =
-    props;
+  const { ratingValue, releaseDateRange } = props;
   const {
     data: genreData,
     error: genreError,
@@ -46,34 +44,20 @@ export default function FilterMoviesCard(props) {
     queryFn: props.type === "movie" ? getGenres : getGenresShows,
   });
 
-  const {
-    data: ageRatingData,
-    error: ageRatingError,
-    isPending: ageRatingIsPending,
-    isError: ageRatingIsError,
-  } = useQuery({
-    queryKey: ["certifications"],
-    queryFn: getAgeRatings,
-  });
-
-  if (genreIsPending || ageRatingIsPending) {
+  if (genreIsPending) {
     return <Spinner />;
   }
 
   if (genreIsError) {
     return <h1>{genreError.message}</h1>;
-  } else if (ageRatingIsError) return <h1>{ageRatingError.message}</h1>;
+  }
   const genres = genreData.genres;
   if (genres[0].name !== "All") {
     genres.unshift({ id: "0", name: "All" });
   }
 
-  const ageRatings = ageRatingData.certifications.US;
-
-  let valueMarks = [],
-    runtimeMarks = [];
+  let valueMarks = [];
   for (let i = 0; i <= 10; i++) valueMarks.push({ value: i, label: i });
-  for (let i = 0; i <= 300; i += 30) runtimeMarks.push({ value: i, label: i });
 
   const handleChange = (e, type, value) => {
     props.onUserInput(type, value);
@@ -81,11 +65,6 @@ export default function FilterMoviesCard(props) {
 
   const handleGenreChange = (e) => {
     handleChange(e, "genre", e.target.value);
-  };
-
-  const handleAgeRatingChange = (e) => {
-    const { value, checked } = e.target;
-    handleChange(e, "age", { value, checked });
   };
 
   return (
@@ -155,29 +134,6 @@ export default function FilterMoviesCard(props) {
             </Select>
           </FormControl>
           <Divider />
-          <Typography variant="body1">
-            By Age Rating (Which doesn't work rn):
-          </Typography>
-          <FormControl>
-            {ageRatings.map((rating) => {
-              return (
-                <FormControlLabel
-                  key={rating.certification}
-                  label={rating.certification}
-                  control={
-                    <Checkbox
-                      value={rating.certification}
-                      checked={
-                        !ageRatingNotSelected.includes(rating.certification)
-                      }
-                      onChange={handleAgeRatingChange}
-                    />
-                  }
-                />
-              );
-            })}
-          </FormControl>
-          <Divider />
           <Typography variant="body1">By Rating:</Typography>
           <Slider
             value={ratingValue}
@@ -187,20 +143,6 @@ export default function FilterMoviesCard(props) {
             max={10}
             onChange={(event, newValue) => {
               handleChange(event, "rating", newValue);
-            }}
-          />
-          <Divider />
-          <Typography variant="body1">
-            By Runtime (Which also doesn't work rn):
-          </Typography>
-          <Slider
-            value={runtimeValue}
-            step={10}
-            marks={runtimeMarks}
-            min={0}
-            max={300}
-            onChange={(event, newValue) => {
-              handleChange(event, "runtime", newValue);
             }}
           />
         </Stack>

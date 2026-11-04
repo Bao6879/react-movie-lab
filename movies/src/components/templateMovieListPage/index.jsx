@@ -18,9 +18,7 @@ function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const [seenFilter, setSeenFilter] = useState("all");
-  const [ageRatingNotSelected, setAgeRatingNotSelected] = useState([]);
   const [ratingValue, setRatingValue] = useState([0, 10]);
-  const [runtimeValue, setRuntimeValue] = useState([0, 390]);
   const [releaseDateRange, setReleaseDateRange] = useState([
     "1900-01-01",
     "2050-01-01",
@@ -48,11 +46,6 @@ function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
         return (
           m.vote_average >= ratingValue[0] && m.vote_average <= ratingValue[1]
         );
-      })
-      .filter((m) => {
-        //Runtime
-        return true;
-        // return m.runtime >= runtimeValue[0] && m.runtime <= runtimeValue[1];
       })
       .filter((m) => {
         //Release Date
@@ -92,18 +85,8 @@ function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
       case "seen":
         setSeenFilter(value);
         break;
-      case "age":
-        setAgeRatingNotSelected((previous) =>
-          value.checked
-            ? previous.filter((rating) => rating !== value.value)
-            : [...previous, value.value],
-        );
-        break;
       case "rating":
         setRatingValue(value);
-        break;
-      case "runtime":
-        setRuntimeValue(value);
         break;
       case "releaseDateRange":
         setReleaseDateRange(value);
@@ -185,9 +168,7 @@ function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
             titleFilter={nameFilter}
             genreFilter={genreFilter}
             seenFilter={seenFilter}
-            ageRatingNotSelected={ageRatingNotSelected}
             ratingValue={ratingValue}
-            runtimeValue={runtimeValue}
             releaseDateRange={releaseDateRange}
           />
         </Grid>

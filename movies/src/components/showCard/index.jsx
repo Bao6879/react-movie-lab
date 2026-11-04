@@ -37,7 +37,7 @@ export default function ShowCard({ show, action }) {
     return () => clearInterval(timer);
   }, [hovering]);
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ["images", { id: show.id, type: "tv" }],
+    queryKey: ["images", { id: show.id, type: "show" }],
     queryFn: getMovieImages,
   });
 

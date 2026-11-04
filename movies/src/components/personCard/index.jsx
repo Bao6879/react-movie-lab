@@ -24,13 +24,11 @@ export default function PersonCard({ person }) {
   return (
     <Card
       sx={{
-        transition:
-          "transform 300ms ease, box-shadow 300ms ease, background-color 300ms ease",
+        transition: "transform 300ms ease, box-shadow 300ms ease",
 
         "&:hover": {
           transform: "translateY(-8px)",
           boxShadow: 5,
-          backgroundColor: "lightgrey",
         },
       }}
     >
@@ -51,18 +49,19 @@ export default function PersonCard({ person }) {
       <CardContent>
         <Box>
           <Typography
-            variant="caption"
+            variant="h6"
             component="p"
-            sx={{ fontStyle: "italic", fontSize: 15, textAlign: "center" }}
+            sx={{ fontStyle: "italic", textAlign: "center" }}
           >
             {person.known_for_department}
           </Typography>
           <Typography
             variant="body2"
             component="p"
+            noWrap
             sx={{ textAlign: "center", mt: 1 }}
           >
-            Known for: {knownFor.join(", ")}
+            Known for: {knownFor.length >= 1 ? knownFor[0] : "-"}
           </Typography>
           <Typography
             variant="caption"

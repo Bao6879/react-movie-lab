@@ -66,7 +66,7 @@ export const getShows = (args) => {
         title: show.name,
         date: show.first_air_date,
         image: show.poster_path,
-        type: "tv",
+        type: "show",
       })),
     }))
     .catch((error) => {
@@ -160,8 +160,13 @@ export const getGenresShows = () => {
 export const getMovieImages = ({ queryKey }) => {
   const [, idPart] = queryKey;
   const { id, type = "movie" } = idPart;
+  // TMDB calls shows "tv" in its URLs
+  let path = type;
+  if (type === "show") {
+    path = "tv";
+  }
   return fetch(
-    `https://api.themoviedb.org/3/${type}/${id}/images?api_key=${import.meta.env.VITE_TMDB_KEY}`,
+    `https://api.themoviedb.org/3/${path}/${id}/images?api_key=${import.meta.env.VITE_TMDB_KEY}`,
   )
     .then((response) => {
       if (!response.ok) {

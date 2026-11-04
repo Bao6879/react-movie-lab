@@ -14,7 +14,7 @@ const ContentList = (props) => {
       >
         <Movie key={m.id} movie={m} action={props.action} />
       </Grid>
-    ) : m.type === "tv" ? (
+    ) : m.type === "show" ? (
       <Grid key={m.id} size={12} sx={{ padding: "20px" }}>
         <Show key={m.id} show={m} action={props.action} />
       </Grid>

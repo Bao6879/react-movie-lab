@@ -41,7 +41,12 @@ export default function FilterCard(props) {
     isError: genreIsError,
   } = useQuery({
     queryKey: ["genres", { type: props.type }],
-    queryFn: props.type === "movie" ? getGenres : getGenresShows,
+    queryFn:
+      props.type === "movie"
+        ? getGenres
+        : props.type === "show"
+          ? getGenresShows
+          : getGenres,
   });
 
   if (genreIsPending) {
@@ -74,49 +79,51 @@ export default function FilterCard(props) {
       </AccordionSummary>
       <AccordionDetails>
         <Stack spacing={2} useFlexGap sx={{ padding: 2 }}>
-          <Typography variant="body1">
-            By Seen: (Does nothing for people)
-          </Typography>
-          <RadioGroup
-            value={props.seenFilter}
-            name="radio-buttons-group"
-            onChange={(e) => handleChange(e, "seen", e.target.value)}
-          >
-            <FormControlLabel value="all" control={<Radio />} label="All" />
-            <FormControlLabel
-              value="seen"
-              control={<Radio />}
-              label="Stuff I have seen"
-            />
-            <FormControlLabel
-              value="unseen"
-              control={<Radio />}
-              label="Stuff I haven't seen"
-            />
-          </RadioGroup>
-          <Divider />
-          <Typography variant="body1">By Release Date:</Typography>
-          <TextField
-            type="date"
-            value={releaseDateRange[0]}
-            onChange={(event) => {
-              handleChange(event, "releaseDateRange", [
-                event.target.value,
-                releaseDateRange[1],
-              ]);
-            }}
-          />
-          <TextField
-            type="date"
-            value={releaseDateRange[1]}
-            onChange={(event) => {
-              handleChange(event, "releaseDateRange", [
-                releaseDateRange[0],
-                event.target.value,
-              ]);
-            }}
-          />
-          <Divider />
+          {props.type !== "person" ? (
+            <>
+              <Typography variant="body1">By Seen:</Typography>
+              <RadioGroup
+                value={props.seenFilter}
+                name="radio-buttons-group"
+                onChange={(e) => handleChange(e, "seen", e.target.value)}
+              >
+                <FormControlLabel value="all" control={<Radio />} label="All" />
+                <FormControlLabel
+                  value="seen"
+                  control={<Radio />}
+                  label="Stuff I have seen"
+                />
+                <FormControlLabel
+                  value="unseen"
+                  control={<Radio />}
+                  label="Stuff I haven't seen"
+                />
+              </RadioGroup>
+              <Divider />
+              <Typography variant="body1">By Release Date:</Typography>
+              <TextField
+                type="date"
+                value={releaseDateRange[0]}
+                onChange={(event) => {
+                  handleChange(event, "releaseDateRange", [
+                    event.target.value,
+                    releaseDateRange[1],
+                  ]);
+                }}
+              />
+              <TextField
+                type="date"
+                value={releaseDateRange[1]}
+                onChange={(event) => {
+                  handleChange(event, "releaseDateRange", [
+                    releaseDateRange[0],
+                    event.target.value,
+                  ]);
+                }}
+              />
+              <Divider />
+            </>
+          ) : null}
           <Typography variant="body1">By Genre:</Typography>
           <FormControl sx={{ ...formControl }}>
             <InputLabel id="genre-label">Genre</InputLabel>

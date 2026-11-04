@@ -123,28 +123,32 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
           }}
           sx={{ marginLeft: 5 }}
         />
-        <Chip
-          icon={<StarIcon />}
-          label="By Rating"
-          size="medium"
-          color="success"
-          variant={sortCriteria === 1 ? "filled" : "outlined"}
-          onClick={() => {
-            setSortCriteria(1);
-          }}
-          sx={{ marginLeft: 5 }}
-        />
-        <Chip
-          icon={<CalendarTodayIcon />}
-          label="By Release Date"
-          variant={sortCriteria === 2 ? "filled" : "outlined"}
-          color="secondary"
-          size="medium"
-          onClick={() => {
-            setSortCriteria(2);
-          }}
-          sx={{ marginLeft: 5 }}
-        />
+        {type !== "person" ? (
+          <>
+            <Chip
+              icon={<StarIcon />}
+              label="By Rating"
+              size="medium"
+              color="success"
+              variant={sortCriteria === 1 ? "filled" : "outlined"}
+              onClick={() => {
+                setSortCriteria(1);
+              }}
+              sx={{ marginLeft: 5 }}
+            />
+            <Chip
+              icon={<CalendarTodayIcon />}
+              label="By Release Date"
+              variant={sortCriteria === 2 ? "filled" : "outlined"}
+              color="secondary"
+              size="medium"
+              onClick={() => {
+                setSortCriteria(2);
+              }}
+              sx={{ marginLeft: 5 }}
+            />
+          </>
+        ) : null}
         <Chip
           icon={<TextFieldsIcon />}
           label="By Title"

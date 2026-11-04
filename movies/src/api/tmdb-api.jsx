@@ -10,6 +10,15 @@ export const getDiscoverMovies = () => {
       }
       return response.json();
     })
+    .then((data) => ({
+      ...data,
+      results: data.results.map((movie) => ({
+        ...movie,
+        date: movie.release_date,
+        image: movie.poster_path,
+        type: "movie",
+      })),
+    }))
     .catch((error) => {
       throw error;
     });
@@ -27,6 +36,15 @@ export const getPlayingMovies = () => {
       }
       return response.json();
     })
+    .then((data) => ({
+      ...data,
+      results: data.results.map((movie) => ({
+        ...movie,
+        date: movie.release_date,
+        image: movie.poster_path,
+        type: "movie",
+      })),
+    }))
     .catch((error) => {
       throw error;
     });
@@ -44,6 +62,16 @@ export const getShows = () => {
       }
       return response.json();
     })
+    .then((data) => ({
+      ...data,
+      results: data.results.map((show) => ({
+        ...show,
+        title: show.name,
+        date: show.first_air_date,
+        image: show.poster_path,
+        type: "tv",
+      })),
+    }))
     .catch((error) => {
       throw error;
     });
@@ -61,6 +89,15 @@ export const getUpcomingMovies = () => {
       }
       return response.json();
     })
+    .then((data) => ({
+      ...data,
+      results: data.results.map((movie) => ({
+        ...movie,
+        date: movie.release_date,
+        image: movie.poster_path,
+        type: "movie",
+      })),
+    }))
     .catch((error) => {
       throw error;
     });

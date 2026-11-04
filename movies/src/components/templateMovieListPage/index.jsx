@@ -56,10 +56,7 @@ function MovieListPageTemplate({ movies, title, action }) {
       })
       .filter((m) => {
         //Release Date
-        return (
-          m.release_date >= releaseDateRange[0] &&
-          m.release_date <= releaseDateRange[1]
-        );
+        return m.date >= releaseDateRange[0] && m.date <= releaseDateRange[1];
       });
     console.log(m);
     let direction = 1; //Ascending
@@ -75,9 +72,7 @@ function MovieListPageTemplate({ movies, title, action }) {
         });
       case 2: //Release date
         return [...m].sort((a, b) => {
-          return (
-            direction * (new Date(b.release_date) - new Date(a.release_date))
-          );
+          return direction * (new Date(b.date) - new Date(a.date));
         });
       case 3: //Title
         console.log(

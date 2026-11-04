@@ -32,7 +32,7 @@ const App = () => {
           <SiteHeader />
           <Routes>
             <Route path="/favorites" element={<FavoriteMoviesPage />} />
-            <Route path="/movies/upcoming" element={<UpcomingMoviesPage />} />
+            <Route path="/movies/upcoming" element={<MoviesDiscoverPage />} />
             <Route path="/watchlist" element={<WatchlistPage />} />
             <Route path="/reviews/:id" element={<MovieReviewPage />} />
             <Route path="/movies/:id" element={<MoviePage />} />

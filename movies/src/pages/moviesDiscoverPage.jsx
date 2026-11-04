@@ -11,7 +11,9 @@ const MoviesDiscoverPage = (props) => {
     queryKey: ["movies", location.pathname],
     queryFn: location.pathname.includes("playing")
       ? getPlayingMovies
-      : getDiscoverMovies,
+      : location.pathname.includes("upcoming")
+        ? getUpcomingMovies
+        : getDiscoverMovies,
   });
 
   if (isPending) {

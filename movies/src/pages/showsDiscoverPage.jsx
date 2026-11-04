@@ -22,9 +22,13 @@ const ShowsDiscoverPage = (props) => {
 
   console.log(shows);
   return (
-    <div>
-      <h1>{shows[0].name}</h1>
-    </div>
+    <PageTemplate
+      title="Discover Shows"
+      movies={shows}
+      // action={(shows) => {
+      //   return <MovieActions movie={show} />;
+      // }}
+    />
   );
 };
 export default ShowsDiscoverPage;

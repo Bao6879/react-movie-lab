@@ -160,9 +160,9 @@ export const getAgeRatings = () => {
 
 export const getMovieImages = ({ queryKey }) => {
   const [, idPart] = queryKey;
-  const { id } = idPart;
+  const { id, type = "movie" } = idPart;
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}/images?api_key=${import.meta.env.VITE_TMDB_KEY}`,
+    `https://api.themoviedb.org/3/${type}/${id}/images?api_key=${import.meta.env.VITE_TMDB_KEY}`,
   )
     .then((response) => {
       if (!response.ok) {

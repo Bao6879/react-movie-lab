@@ -41,12 +41,7 @@ export default function FilterCard(props) {
     isError: genreIsError,
   } = useQuery({
     queryKey: ["genres", { type: props.type }],
-    queryFn:
-      props.type === "movie"
-        ? getGenres
-        : props.type === "show"
-          ? getGenresShows
-          : getGenres,
+    queryFn: props.type === "movie" ? getGenres : getGenresShows,
   });
 
   if (genreIsPending) {
@@ -56,13 +51,32 @@ export default function FilterCard(props) {
   if (genreIsError) {
     return <h1>{genreError.message}</h1>;
   }
-  const genres = genreData.genres;
+  let genres = genreData.genres;
+  if (props.type === "person") {
+    genres = [
+      { id: "Acting", name: "Acting" },
+      { id: "Directing", name: "Directing" },
+      { id: "Writing", name: "Writing" },
+      { id: "Production", name: "Production" },
+      { id: "Sound", name: "Sound" },
+      { id: "Camera", name: "Camera" },
+      { id: "Editing", name: "Editing" },
+      { id: "Art", name: "Art" },
+      { id: "Crew", name: "Crew" },
+      { id: "Costume & Make-Up", name: "Costume & Make-Up" },
+      { id: "Visual Effects", name: "Visual Effects" },
+      { id: "Lighting", name: "Lighting" },
+    ];
+  }
   if (genres[0].name !== "All") {
     genres.unshift({ id: "0", name: "All" });
   }
 
   let valueMarks = [];
-  for (let i = 0; i <= 10; i++) valueMarks.push({ value: i, label: i });
+  if (props.type !== "person")
+    for (let i = 0; i <= 10; i++) valueMarks.push({ value: i, label: i });
+  else
+    for (let i = 0; i <= 100; i += 10) valueMarks.push({ value: i, label: i });
 
   const handleChange = (e, type, value) => {
     props.onUserInput(type, value);
@@ -143,13 +157,15 @@ export default function FilterCard(props) {
             </Select>
           </FormControl>
           <Divider />
-          <Typography variant="body1">By Rating:</Typography>
+          <Typography variant="body1">
+            By {props.type !== "person" ? "Rating" : "Popularity"}:
+          </Typography>
           <Slider
             value={ratingValue}
-            step={0.5}
+            step={props.type !== "person" ? 0.5 : 10}
             marks={valueMarks}
             min={0}
-            max={10}
+            max={props.type !== "person" ? 10 : 100}
             onChange={(event, newValue) => {
               handleChange(event, "rating", newValue);
             }}

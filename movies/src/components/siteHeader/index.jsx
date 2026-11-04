@@ -74,11 +74,13 @@ const SiteHeader = () => {
 
   const handleDiscoverMenuSelect = (discoverType) => {
     setAnchorDisc(null);
-    let start = "/movies";
-    if (location.pathname.startsWith("/shows")) start = "/shows";
     changeDiscoverState(discoverType);
-    console.log(constructPath(start, discoverType));
-    navigate(constructPath(start, discoverType));
+    let start = "/movies";
+    if (location.pathname.startsWith("/people")) navigate("/people");
+    else {
+      if (location.pathname.startsWith("/shows")) start = "/shows";
+      navigate(constructPath(start, discoverType));
+    }
   };
 
   const handleAccMenuSelect = (url) => {
@@ -152,7 +154,7 @@ const SiteHeader = () => {
           />
           <TextField
             id="name-search"
-            label="Search for a movie"
+            label="Search for something"
             type="search"
             variant="filled"
             slotProps={{

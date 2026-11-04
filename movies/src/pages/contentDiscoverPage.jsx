@@ -42,6 +42,7 @@ const ContentDiscoverPage = (props) => {
 
   return (
     <PageTemplate
+      key={type} //Make rerender on content type switching
       type={type}
       items={items}
       action={(movie) => {

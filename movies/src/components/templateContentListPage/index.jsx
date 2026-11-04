@@ -17,7 +17,9 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const [seenFilter, setSeenFilter] = useState("all");
-  const [ratingValue, setRatingValue] = useState([0, 10]);
+  const [ratingValue, setRatingValue] = useState(
+    type === "person" ? [0, 100] : [0, 10],
+  );
   const [releaseDateRange, setReleaseDateRange] = useState([
     "1900-01-01",
     "2050-01-01",
@@ -35,13 +37,19 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
         return m.title.toLowerCase().includes(searchValue.toLowerCase());
       })
       .filter((m) => {
-        //Genre
-        if (m.type === "person") return true;
+        //Genre | Department
+        if (m.type === "person")
+          return genreId === 0 || m.known_for_department === genreFilter;
         return genreId > 0 ? m.genre_ids.includes(genreId) : true;
       })
       .filter((m) => {
         //Rating
-        if (m.type === "person") return true;
+        if (m.type === "person") {
+          if (ratingValue[1] === 100) return m.popularity >= ratingValue[0];
+          return (
+            m.popularity >= ratingValue[0] && m.popularity < ratingValue[1]
+          );
+        }
         return (
           m.vote_average >= ratingValue[0] && m.vote_average <= ratingValue[1]
         );

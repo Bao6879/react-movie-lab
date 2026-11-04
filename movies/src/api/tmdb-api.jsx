@@ -1,3 +1,37 @@
+const PAGES = 20;
+
+const fetchPages = (url) => {
+  const requests = [];
+  for (let page = 1; page <= PAGES; page++) {
+    requests.push(
+      fetch(`${url}&page=${page}`).then((response) => {
+        if (!response.ok) {
+          throw new Error("Page " + page + " failed");
+        }
+        return response.json();
+      }),
+    );
+  }
+
+  return Promise.all(requests).then((pages) => {
+    let all = [];
+    for (const pageData of pages) {
+      all = [...all, ...pageData.results];
+    }
+
+    let finalData = [];
+    const seenIds = new Set();
+    for (let i = 0; i < all.length; i++) {
+      if (!seenIds.has(all[i].id)) {
+        seenIds.add(all[i].id);
+        finalData.push(all[i]);
+      }
+    }
+
+    return { ...pages[0], results: finalData };
+  });
+};
+
 export const getMovies = (args) => {
   const [, categoryPart] = args.queryKey;
   const { category } = categoryPart;
@@ -11,29 +45,17 @@ export const getMovies = (args) => {
     path = "movie/upcoming";
   }
 
-  return fetch(
-    `https://api.themoviedb.org/3/${path}?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=1`,
-  )
-    .then((response) => {
-      if (!response.ok) {
-        return response.json().then((error) => {
-          throw new Error(error.status_message || "Something went wrong");
-        });
-      }
-      return response.json();
-    })
-    .then((data) => ({
-      ...data,
-      results: data.results.map((movie) => ({
-        ...movie,
-        date: movie.release_date,
-        image: movie.poster_path,
-        type: "movie",
-      })),
-    }))
-    .catch((error) => {
-      throw error;
-    });
+  return fetchPages(
+    `https://api.themoviedb.org/3/${path}?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US`,
+  ).then((data) => ({
+    ...data,
+    results: data.results.map((movie) => ({
+      ...movie,
+      date: movie.release_date,
+      image: movie.poster_path,
+      type: "movie",
+    })),
+  }));
 };
 
 export const getShows = (args) => {
@@ -48,56 +70,33 @@ export const getShows = (args) => {
   } else if (category === "upcoming") {
     path = "tv/on_the_air";
   }
-  return fetch(
-    `https://api.themoviedb.org/3/${path}?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&include_null_first_air_dates=false&page=1`,
-  )
-    .then((response) => {
-      if (!response.ok) {
-        return response.json().then((error) => {
-          throw new Error(error.status_message || "Something went wrong");
-        });
-      }
-      return response.json();
-    })
-    .then((data) => ({
-      ...data,
-      results: data.results.map((show) => ({
-        ...show,
-        title: show.name,
-        date: show.first_air_date,
-        image: show.poster_path,
-        type: "show",
-      })),
-    }))
-    .catch((error) => {
-      throw error;
-    });
+
+  return fetchPages(
+    `https://api.themoviedb.org/3/${path}?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&include_null_first_air_dates=false`,
+  ).then((data) => ({
+    ...data,
+    results: data.results.map((show) => ({
+      ...show,
+      title: show.name,
+      date: show.first_air_date,
+      image: show.poster_path,
+      type: "show",
+    })),
+  }));
 };
 
 export const getPeople = () => {
-  return fetch(
-    `https://api.themoviedb.org/3/person/popular?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US&page=1`,
-  )
-    .then((response) => {
-      if (!response.ok) {
-        return response.json().then((error) => {
-          throw new Error(error.status_message || "Something went wrong");
-        });
-      }
-      return response.json();
-    })
-    .then((data) => ({
-      ...data,
-      results: data.results.map((person) => ({
-        ...person,
-        title: person.name,
-        image: person.profile_path,
-        type: "person",
-      })),
-    }))
-    .catch((error) => {
-      throw error;
-    });
+  return fetchPages(
+    `https://api.themoviedb.org/3/person/popular?api_key=${import.meta.env.VITE_TMDB_KEY}&language=en-US`,
+  ).then((data) => ({
+    ...data,
+    results: data.results.map((person) => ({
+      ...person,
+      title: person.name,
+      image: person.profile_path,
+      type: "person",
+    })),
+  }));
 };
 
 export const getMovie = (args) => {

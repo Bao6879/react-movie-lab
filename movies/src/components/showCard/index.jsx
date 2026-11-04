@@ -26,20 +26,21 @@ export default function ShowCard({ show, action }) {
   const { favorites, addToFavorites } = useContext(MoviesContext);
   const [currentPoster, setCurrentPoster] = useState(0);
   const [hovering, setHovering] = useState(false);
-
-  useEffect(() => {
-    //On render
-    if (!hovering) return;
-    const timer = setInterval(() => {
-      setCurrentPoster((prev) => (prev + 1) % 3);
-    }, 2000);
-
-    return () => clearInterval(timer);
-  }, [hovering]);
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["images", { id: show.id, type: "show" }],
     queryFn: getMovieImages,
   });
+
+  useEffect(() => {
+    //On render
+    if (!hovering) return;
+    if (data.backdrops.length === 0) return;
+    const timer = setInterval(() => {
+      setCurrentPoster((prev) => (prev + 1) % data.backdrops.length);
+    }, 2000);
+
+    return () => clearInterval(timer);
+  }, [hovering]);
 
   if (isPending) {
     return <Spinner />;
@@ -48,7 +49,10 @@ export default function ShowCard({ show, action }) {
   if (isError) {
     return <h1>{error.message}</h1>;
   }
-  const posterUrl = `https://image.tmdb.org/t/p/w500/${data.backdrops[currentPoster].file_path}`;
+  const posterUrl =
+    data.backdrops.length === 0
+      ? img
+      : `https://image.tmdb.org/t/p/w500/${data.backdrops[currentPoster].file_path}`;
 
   if (favorites.find((id) => id === show.id)) {
     show.favorite = true;

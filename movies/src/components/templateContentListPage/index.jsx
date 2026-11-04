@@ -12,8 +12,11 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import StarIcon from "@mui/icons-material/Star";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
+import Box from "@mui/material/Box";
+import Pagination from "@mui/material/Pagination";
 
 function ContentListPageTemplate({ items, action, type = "movie" }) {
+  const [page, setPage] = useState(1);
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const [seenFilter, setSeenFilter] = useState("all");
@@ -83,6 +86,7 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
   };
 
   const handleChange = (type, value) => {
+    setPage(1);
     switch (type) {
       case "name":
         setNameFilter(value);
@@ -103,6 +107,13 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
   };
 
   let displayedItems = getDisplayedItems(items);
+  let pageCount = Math.ceil(displayedItems.length / 20);
+  // Search can shrink the list without going through handleChange so never point past the last page (and never below page 1)
+  const currentPage = Math.max(1, Math.min(page, pageCount));
+  displayedItems = displayedItems.slice(
+    (currentPage - 1) * 20,
+    currentPage * 20,
+  );
 
   return (
     <Grid container size={12}>
@@ -117,6 +128,7 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
           color="primary"
           onClick={() => {
             setSortDirection((previous) => (previous + 1) % 2);
+            setPage(1);
           }}
           sx={{ marginLeft: 5 }}
         />
@@ -128,6 +140,7 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
           variant={sortCriteria === 0 ? "filled" : "outlined"}
           onClick={() => {
             setSortCriteria(0);
+            setPage(1);
           }}
           sx={{ marginLeft: 5 }}
         />
@@ -141,6 +154,7 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
               variant={sortCriteria === 1 ? "filled" : "outlined"}
               onClick={() => {
                 setSortCriteria(1);
+                setPage(1);
               }}
               sx={{ marginLeft: 5 }}
             />
@@ -152,6 +166,7 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
               size="medium"
               onClick={() => {
                 setSortCriteria(2);
+                setPage(1);
               }}
               sx={{ marginLeft: 5 }}
             />
@@ -165,6 +180,7 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
           variant={sortCriteria === 3 ? "filled" : "outlined"}
           onClick={() => {
             setSortCriteria(3);
+            setPage(1);
           }}
           sx={{ marginLeft: 5 }}
         />
@@ -186,6 +202,19 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
         </Grid>
         <Grid container size={{ xs: 12, md: 10 }}>
           <ContentList action={action} items={displayedItems}></ContentList>
+        </Grid>
+        <Grid size={12}>
+          <Box sx={{ display: "flex", justifyContent: "center", padding: 3 }}>
+            <Pagination
+              count={pageCount}
+              page={currentPage}
+              size="large"
+              onChange={(event, value) => {
+                setPage(value);
+                window.scrollTo(0, 0);
+              }}
+            />
+          </Box>
         </Grid>
       </Grid>
     </Grid>

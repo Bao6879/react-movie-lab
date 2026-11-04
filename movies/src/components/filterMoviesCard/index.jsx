@@ -12,7 +12,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import img from "../../images/pexels-dziana-hasanbekava-5480827.jpg";
-import { getGenres, getAgeRatings } from "../../api/tmdb-api";
+import { getGenres, getGenresShows, getAgeRatings } from "../../api/tmdb-api";
 import Stack from "@mui/material/Stack";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -42,8 +42,8 @@ export default function FilterMoviesCard(props) {
     isPending: genreIsPending,
     isError: genreIsError,
   } = useQuery({
-    queryKey: ["genres"],
-    queryFn: getGenres,
+    queryKey: ["genres", { type: props.type }],
+    queryFn: props.type === "movie" ? getGenres : getGenresShows,
   });
 
   const {

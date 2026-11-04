@@ -24,6 +24,7 @@ const ShowsDiscoverPage = (props) => {
   return (
     <PageTemplate
       title="Discover Shows"
+      type="tv"
       movies={shows}
       // action={(shows) => {
       //   return <MovieActions movie={show} />;

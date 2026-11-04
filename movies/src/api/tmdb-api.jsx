@@ -141,6 +141,25 @@ export const getGenres = () => {
     });
 };
 
+export const getGenresShows = () => {
+  return fetch(
+    "https://api.themoviedb.org/3/genre/tv/list?api_key=" +
+      import.meta.env.VITE_TMDB_KEY +
+      "&language=en-US",
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export const getAgeRatings = () => {
   return fetch(
     `https://api.themoviedb.org/3/certification/movie/list?api_key=${import.meta.env.VITE_TMDB_KEY}`,

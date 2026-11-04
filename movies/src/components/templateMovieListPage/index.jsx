@@ -14,7 +14,7 @@ import StarIcon from "@mui/icons-material/Star";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 
-function MovieListPageTemplate({ movies, title, action }) {
+function MovieListPageTemplate({ movies, title, action, type = "movie" }) {
   const [nameFilter, setNameFilter] = useState("");
   const [genreFilter, setGenreFilter] = useState("0");
   const [seenFilter, setSeenFilter] = useState("all");
@@ -59,7 +59,7 @@ function MovieListPageTemplate({ movies, title, action }) {
         return m.date >= releaseDateRange[0] && m.date <= releaseDateRange[1];
       });
     console.log(m);
-    let direction = 1; //Ascending
+    let direction = 1; //Descending
     if (sortDirection === 0) direction = -1;
     switch (sortCriteria) {
       case 0: //Popularity
@@ -75,13 +75,8 @@ function MovieListPageTemplate({ movies, title, action }) {
           return direction * (new Date(b.date) - new Date(a.date));
         });
       case 3: //Title
-        console.log(
-          [...m].sort((a, b) => {
-            return direction * a.title.localeCompare(b.title);
-          }),
-        );
         return [...m].sort((a, b) => {
-          return direction * a.title.localeCompare(b.title);
+          return direction * b.title.localeCompare(a.title);
         });
     }
   };
@@ -125,8 +120,8 @@ function MovieListPageTemplate({ movies, title, action }) {
           Sorting Options:
         </Typography>
         <Chip
-          icon={sortDirection === 1 ? <NorthIcon /> : <SouthIcon />}
-          label={sortDirection === 1 ? "Ascending" : "Descending"}
+          icon={sortDirection === 1 ? <SouthIcon /> : <NorthIcon />}
+          label={sortDirection === 1 ? "Descending" : "Ascending"}
           size="medium"
           color="primary"
           onClick={() => {
@@ -185,6 +180,7 @@ function MovieListPageTemplate({ movies, title, action }) {
           sx={{ padding: "20px" }}
         >
           <FilterCard
+            type={type}
             onUserInput={handleChange}
             titleFilter={nameFilter}
             genreFilter={genreFilter}

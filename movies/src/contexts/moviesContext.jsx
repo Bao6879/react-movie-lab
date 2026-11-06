@@ -4,6 +4,7 @@ export const MoviesContext = React.createContext(null);
 
 const MoviesContextProvider = (props) => {
   const [favorites, setFavorites] = useState([]);
+  const [seen, setSeen] = useState([]);
   const [myReviews, setMyReviews] = useState({});
   const [watchlist, setWatchlist] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -18,6 +19,16 @@ const MoviesContextProvider = (props) => {
       newFavorites = [...favorites];
     }
     setFavorites(newFavorites);
+  };
+
+  const addToSeen = (movie) => {
+    let newSeen = [];
+    if (!seen.includes(movie.id)) {
+      newSeen = [...seen, movie.id];
+    } else {
+      newSeen = [...seen];
+    }
+    setSeen(newSeen);
   };
 
   const addReview = (movie, review) => {
@@ -50,6 +61,10 @@ const MoviesContextProvider = (props) => {
     setFavorites(favorites.filter((mId) => mId !== movie.id));
   };
 
+  const removeFromSeen = (movie) => {
+    setFavorites(seen.filter((mId) => mId !== movie.id));
+  };
+
   const removeFromWatchlist = (movie) => {
     setWatchlist(watchlist.filter((mId) => mId !== movie.id));
   };
@@ -59,13 +74,16 @@ const MoviesContextProvider = (props) => {
       value={{
         favorites,
         watchlist,
+        seen,
         discoverState,
         searchValue,
         reviewCount,
         addToFavorites,
         addToWatchlist,
+        addToSeen,
         removeFromFavorites,
         removeFromWatchlist,
+        removeFromSeen,
         addReview,
         changeDiscoverState,
         changeSearchValue,

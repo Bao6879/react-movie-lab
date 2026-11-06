@@ -22,10 +22,12 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import LanguageIcon from "@mui/icons-material/Language";
 import img from "../../images/film-poster-placeholder.png";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { FavoriteOutlined } from "@mui/icons-material";
 
 const darkTheme = createTheme({
   palette: {
@@ -35,8 +37,17 @@ const darkTheme = createTheme({
 
 const TemplateMoviePage = ({ movie, children }) => {
   const [postNum, setPostNum] = useState(0);
-  const { favorites, addToFavorites, removeFromFavorites } =
-    useContext(MoviesContext);
+  const {
+    favorites,
+    addToFavorites,
+    removeFromFavorites,
+    watchlist,
+    addToWatchlist,
+    removeFromWatchlist,
+    seen,
+    addToSeen,
+    removeFromSeen,
+  } = useContext(MoviesContext);
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["images", { id: movie.id }],
     queryFn: getMovieImages,
@@ -72,6 +83,8 @@ const TemplateMoviePage = ({ movie, children }) => {
   console.log(ageRating);
 
   const isFavourite = favorites.includes(movie.id);
+  const isInWatchlist = watchlist.includes(movie.id);
+  const isSeen = seen.includes(movie.id);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -156,30 +169,53 @@ const TemplateMoviePage = ({ movie, children }) => {
                   >
                     {/* favourite*/}
                     <Button
-                      variant="outlined"
+                      variant={isFavourite ? "outlined" : "contained"}
                       color="error"
-                      startIcon={<FavoriteIcon />}
-                      onClick={() => {}}
+                      startIcon={
+                        isFavourite ? <FavoriteIcon /> : <FavoriteOutlined />
+                      }
+                      onClick={() => {
+                        if (isFavourite) removeFromFavorites(movie);
+                        else addToFavorites(movie);
+                      }}
                     >
-                      Favourite
+                      {isFavourite
+                        ? "Remove from favourite"
+                        : "Add to favourite"}
                     </Button>
                     {/* watchlist */}
                     <Button
-                      variant="outlined"
+                      variant={isInWatchlist ? "outlined" : "contained"}
                       color="info"
-                      startIcon={<BookmarkIcon />}
-                      onClick={() => {}}
+                      startIcon={
+                        isInWatchlist ? (
+                          <BookmarkIcon />
+                        ) : (
+                          <BookmarkBorderIcon />
+                        )
+                      }
+                      onClick={() => {
+                        if (isInWatchlist) removeFromWatchlist(movie);
+                        else addToWatchlist(movie);
+                      }}
                     >
-                      Watchlist
+                      {isInWatchlist
+                        ? "Remove from watchlist"
+                        : "Add to watchlist"}
                     </Button>
                     {/* seen */}
                     <Button
-                      variant="outlined"
+                      variant={isSeen ? "outlined" : "contained"}
                       color="success"
-                      startIcon={<VisibilityIcon />}
-                      onClick={() => {}}
+                      startIcon={
+                        isSeen ? <VisibilityIcon /> : <VisibilityOutlinedIcon />
+                      }
+                      onClick={() => {
+                        if (isSeen) removeFromSeen(movie);
+                        else addToSeen(movie);
+                      }}
                     >
-                      Seen
+                      {isSeen ? "Mark as unseen" : "Mark as seen"}
                     </Button>
                     {/* trailer */}
                     <Button
@@ -187,9 +223,20 @@ const TemplateMoviePage = ({ movie, children }) => {
                       color="error"
                       startIcon={<PlayArrowIcon />}
                       component="a"
-                      href={``}
+                      href={
+                        `https://www.youtube.com/watch?v=` +
+                        movie.videos.results.find(
+                          (v) => v.site === "YouTube" && v.type === "Trailer",
+                        ).key
+                      }
+                      disabled={
+                        movie.videos.results.find(
+                          (v) => v.site === "YouTube" && v.type === "Trailer",
+                        ).key == undefined
+                          ? true
+                          : false
+                      }
                       target="_blank"
-                      rel="noopener noreferrer"
                     >
                       Trailer
                     </Button>
@@ -199,9 +246,8 @@ const TemplateMoviePage = ({ movie, children }) => {
                       color="inherit"
                       startIcon={<LanguageIcon />}
                       component="a"
-                      href={``}
+                      href={`${movie.homepage}`}
                       target="_blank"
-                      rel="noopener noreferrer"
                     >
                       Homepage
                     </Button>
@@ -389,10 +435,9 @@ const TemplateMoviePage = ({ movie, children }) => {
                   <Typography variant="h5" component="h2">
                     Top cast
                   </Typography>
-                  {/* "to" will be the full credits page (/movies/:id/credits, not built yet) */}
                   <Link
                     component={RouterLink}
-                    to={``}
+                    to={`/movies/${movie.id}/credits`}
                     color="info.light"
                     underline="hover"
                   >
@@ -400,48 +445,49 @@ const TemplateMoviePage = ({ movie, children }) => {
                   </Link>
                 </Box>
 
-                {/* 5 equal slots in one row */}
                 <Grid container columns={5} spacing={2}>
-                  {/* one Grid per cast member (map here, top 5 only) */}
-                  <Grid size={1}>
-                    {/* the whole card is one link to the person's page */}
-                    <Link
-                      component={RouterLink}
-                      to={``}
-                      underline="none"
-                      color="inherit"
-                      sx={{ display: "block" }}
-                    >
-                      {/* photo: fixed 2:3 shape so missing/odd photos don't change the row height */}
-                      <Box
-                        component="img"
-                        src={img}
-                        alt={""}
-                        sx={{
-                          width: "100%",
-                          aspectRatio: "2 / 3",
-                          objectFit: "cover",
-                          display: "block",
-                          borderRadius: 1,
-                          marginBottom: 1,
-                        }}
-                      />
-                      {/* actor name */}
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ fontWeight: "bold" }}
+                  {movie.credits.cast.slice(0, 5).map((c) => (
+                    <Grid size={1}>
+                      <Link
+                        component={RouterLink}
+                        to={`/people/${c.id}`}
+                        underline="none"
+                        color="inherit"
+                        key={c.id}
+                        sx={{ display: "block" }}
                       >
-                        {""}
-                      </Typography>
-                      {/* character they play */}
-                      <Typography
-                        variant="body2"
-                        sx={{ color: "warning.light" }}
-                      >
-                        {""}
-                      </Typography>
-                    </Link>
-                  </Grid>
+                        <Box
+                          component="img"
+                          src={
+                            c.profile_path != undefined
+                              ? `https://image.tmdb.org/t/p/w185` +
+                                c.profile_path
+                              : img
+                          }
+                          sx={{
+                            width: "100%",
+                            aspectRatio: "2 / 3",
+                            objectFit: "cover",
+                            display: "block",
+                            borderRadius: 1,
+                            marginBottom: 1,
+                          }}
+                        />
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          {c.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "warning.light" }}
+                        >
+                          {c.character}
+                        </Typography>
+                      </Link>
+                    </Grid>
+                  ))}
                 </Grid>
               </Panel>
             </Grid>

@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Spinner from "../spinner";
 import Container from "@mui/material/Container";
 import Panel from "../panel";
+import Typography from "@mui/material/Typography";
 
 const TemplateMoviePage = ({ movie, children }) => {
   const { data, error, isPending, isError } = useQuery({
@@ -30,19 +31,20 @@ const TemplateMoviePage = ({ movie, children }) => {
     <Box
       sx={{
         minHeight: "100vh",
-        // backgroundImage:
-        //   linear - gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
-        // {url("https://image.tmdb.org/t/p/original${movie.backdrop_path}")}
+        bgcolor: "grey.900",
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
       }}
     >
-      <Container maxWidth="xl" sx={{ marginTop: 4 }}>
+      <Container maxWidth="xl" sx={{ paddingTop: 4 }}>
         <Grid container spacing={8}>
           <Grid size={12}>
             {/* title */}
-            <Panel>title</Panel>
+            <Panel>
+              <MovieHeader movie={movie} />
+            </Panel>
           </Grid>
           <Grid size={4}>
             {/* poster */}

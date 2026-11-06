@@ -1,44 +1,50 @@
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router";
 
 const MovieHeader = (props) => {
   const movie = props.movie;
   const navigate = useNavigate();
 
+  let year = "";
+  if (movie.release_date) {
+    year = movie.release_date.slice(0, 4);
+  }
+
   return (
-    <Paper
-      component="div"
+    <Box
       sx={{
         display: "flex",
-        justifyContent: "space-around",
-        flexWrap: "wrap",
-        padding: 1.5,
-        margin: 0,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingTop: 3,
       }}
     >
-      <IconButton aria-label="go back" onClick={() => navigate(-1)}>
-        <ArrowBackIcon color="primary" fontSize="large" />
-      </IconButton>
+      <Box sx={{ textAlign: "center" }}>
+        <Typography variant="h3" component="h1">
+          {movie.title}{" "}
+          {year && (
+            <Typography variant="h4" component="span" color="text.secondary">
+              ({year})
+            </Typography>
+          )}
+        </Typography>
 
-      <Typography variant="h4" component="h3">
-        {movie.title}
-        <a href={movie.homepage}>
-          <HomeIcon color="primary" />
-        </a>
-        <br />
-        <span sx={{ fontSize: "1.5rem" }}>{`   "${movie.tagline}"`} </span>
-      </Typography>
-
-      <IconButton aria-label="go forward" onClick={() => navigate(+1)}>
-        <ArrowForwardIcon color="primary" fontSize="large" />
-      </IconButton>
-    </Paper>
+        {movie.tagline && (
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            sx={{ fontStyle: "italic" }}
+          >
+            "{movie.tagline}"
+          </Typography>
+        )}
+      </Box>
+    </Box>
   );
 };
 

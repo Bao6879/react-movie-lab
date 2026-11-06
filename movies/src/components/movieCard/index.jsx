@@ -14,7 +14,7 @@ import img from "../../images/film-poster-placeholder.png";
 import { Link } from "react-router";
 import Avatar from "@mui/material/Avatar";
 import { useContext } from "react";
-import { MoviesContext } from "../../contexts/moviesContext";
+import { MoviesContext, makeKey } from "../../contexts/moviesContext";
 import { getMovieImages } from "../../api/tmdb-api";
 import { useQuery } from "@tanstack/react-query";
 import { dateFormatter } from "../../util";
@@ -53,7 +53,7 @@ export default function MovieCard({ movie, action }) {
       ? img
       : `https://image.tmdb.org/t/p/w500/${data.posters[currentPoster].file_path}`;
 
-  if (favorites.find((id) => id === movie.id)) {
+  if (favorites.includes(makeKey(movie))) {
     movie.favorite = true;
   } else {
     movie.favorite = false;

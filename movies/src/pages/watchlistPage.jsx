@@ -8,10 +8,15 @@ import RemoveFromWatchlist from "../components/cardIcons/removeFromWatchlist.jsx
 import WriteReview from "../components/cardIcons/writeReview";
 
 const watchlistPage = () => {
-  const { watchlist: movieIds } = useContext(MoviesContext);
+  const { watchlist } = useContext(MoviesContext);
+
+  // the list holds "movie-550" / "show-1396" keys: keep the movies, cut off "movie-"
+  // (shows get their own page later)
+  const movieIds = watchlist
+    .filter((key) => key.startsWith("movie-"))
+    .map((key) => key.replace("movie-", ""));
 
   // Create an array of queries and run in parallel.
-  console.log(movieIds);
   const watchlistQueries = useQueries({
     queries: movieIds.map((movieId) => {
       return {

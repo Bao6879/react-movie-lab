@@ -113,6 +113,12 @@ export const getMovie = (args) => {
       }
       return response.json();
     })
+    .then((movie) => ({
+      ...movie,
+      date: movie.release_date,
+      image: movie.poster_path,
+      type: "movie",
+    }))
     .catch((error) => {
       throw error;
     });
@@ -192,6 +198,25 @@ export const getMovieImages = ({ queryKey }) => {
   }
   return fetch(
     `https://api.themoviedb.org/3/${path}/${id}/images?api_key=${import.meta.env.VITE_TMDB_KEY}`,
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export const getSeason = ({ queryKey }) => {
+  const [, idPart] = queryKey;
+  const { id, season } = idPart;
+  return fetch(
+    `https://api.themoviedb.org/3/tv/${id}/season/${season}?api_key=${import.meta.env.VITE_TMDB_KEY}`,
   )
     .then((response) => {
       if (!response.ok) {

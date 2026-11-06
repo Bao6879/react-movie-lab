@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { MoviesContext } from "../../contexts/moviesContext";
+import { MoviesContext, makeKey } from "../../contexts/moviesContext";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import MovieHeader from "../headerMovie";
 import Grid from "@mui/material/Grid";
@@ -31,6 +31,8 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MovieReviews from "../movieReviews";
 import ReviewForm from "../reviewForm";
+import SeasonEpisodes from "../seasonEpisodes";
+import ButtonBase from "@mui/material/ButtonBase";
 import { dateFormatter } from "../../util";
 
 const darkTheme = createTheme({
@@ -43,6 +45,7 @@ const TemplateShowPage = ({ show }) => {
   const [postNum, setPostNum] = useState(0);
   const [reviewsOpen, setReviewsOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [selectedSeason, setSelectedSeason] = useState(null);
   const {
     favorites,
     addToFavorites,
@@ -90,10 +93,10 @@ const TemplateShowPage = ({ show }) => {
     (v) => v.site === "YouTube" && v.type === "Trailer",
   );
 
-  const isFavourite = favorites.includes(show.id);
-  const isInWatchlist = watchlist.includes(show.id);
-  const isSeen = seen.includes(show.id);
-  const hasReviewed = myReviews[show.id] !== undefined;
+  const isFavourite = favorites.includes(makeKey(show));
+  const isInWatchlist = watchlist.includes(makeKey(show));
+  const isSeen = seen.includes(makeKey(show));
+  const hasReviewed = myReviews[makeKey(show)] !== undefined;
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -128,7 +131,13 @@ const TemplateShowPage = ({ show }) => {
                         ? `https://image.tmdb.org/t/p/original${show.poster_path}`
                         : img
                   }
-                  sx={{ width: "100%", display: "block", borderRadius: 1 }}
+                  sx={{
+                    width: "100%",
+                    aspectRatio: "2 / 3",
+                    objectFit: "cover",
+                    display: "block",
+                    borderRadius: 1,
+                  }}
                 ></Box>
               </Panel>
             </Grid>
@@ -467,6 +476,95 @@ const TemplateShowPage = ({ show }) => {
                     </Grid>
                   ))}
                 </Grid>
+              </Panel>
+            </Grid>
+            <Grid size={12}>
+              {/* seasons */}
+              <Panel>
+                <Typography
+                  variant="h5"
+                  component="h2"
+                  sx={{ marginBottom: 2 }}
+                >
+                  Seasons
+                </Typography>
+
+                {/* one row that scrolls sideways instead of wrapping */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    overflowX: "auto",
+                    padding: 0.5, // room for the outline, overflow would cut it off
+                    paddingBottom: 1.5, // space above the scrollbar
+                  }}
+                >
+                  {show.seasons.map((s) => (
+                    // fixed width + no shrinking, so tiles keep their size and the row scrolls
+                    <Box key={s.id} sx={{ width: 160, flexShrink: 0 }}>
+                      <ButtonBase
+                        onClick={() => {
+                          setSelectedSeason(s.season_number);
+                        }}
+                        sx={{
+                          display: "block",
+                          width: "100%",
+                          textAlign: "left",
+                          borderRadius: 1,
+                          padding: 0.5,
+                          outline: "2px solid",
+                          // orange on the selected season, invisible on the rest
+                          outlineColor:
+                            s.season_number === selectedSeason
+                              ? "warning.light"
+                              : "transparent",
+                        }}
+                      >
+                        <Box
+                          component="img"
+                          src={
+                            s.poster_path != undefined
+                              ? `https://image.tmdb.org/t/p/w185` +
+                                s.poster_path
+                              : img
+                          }
+                          sx={{
+                            width: "100%",
+                            aspectRatio: "2 / 3",
+                            objectFit: "cover",
+                            display: "block",
+                            borderRadius: 1,
+                            marginBottom: 1,
+                          }}
+                        />
+                        <Typography
+                          variant="subtitle1"
+                          noWrap
+                          sx={{ fontWeight: "bold" }}
+                        >
+                          {s.name}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "warning.light" }}
+                        >
+                          {s.episode_count +
+                            " episodes" +
+                            (s.air_date != null
+                              ? " • " + s.air_date.slice(0, 4)
+                              : "")}
+                        </Typography>
+                      </ButtonBase>
+                    </Box>
+                  ))}
+                </Box>
+                {selectedSeason !== null ? (
+                  <SeasonEpisodes
+                    show={show}
+                    season={selectedSeason}
+                    key={selectedSeason}
+                  />
+                ) : null}
               </Panel>
             </Grid>
             <Grid size={12}>

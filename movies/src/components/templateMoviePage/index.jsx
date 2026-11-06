@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { MoviesContext } from "../../contexts/moviesContext";
+import { MoviesContext, makeKey } from "../../contexts/moviesContext";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import MovieHeader from "../headerMovie";
 import Grid from "@mui/material/Grid";
@@ -95,10 +95,10 @@ const TemplateMoviePage = ({ movie, children }) => {
     (v) => v.site === "YouTube" && v.type === "Trailer",
   );
 
-  const isFavourite = favorites.includes(movie.id);
-  const isInWatchlist = watchlist.includes(movie.id);
-  const isSeen = seen.includes(movie.id);
-  const hasReviewed = myReviews[movie.id] !== undefined;
+  const isFavourite = favorites.includes(makeKey(movie));
+  const isInWatchlist = watchlist.includes(makeKey(movie));
+  const isSeen = seen.includes(makeKey(movie));
+  const hasReviewed = myReviews[makeKey(movie)] !== undefined;
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -133,7 +133,13 @@ const TemplateMoviePage = ({ movie, children }) => {
                         ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
                         : img
                   }
-                  sx={{ width: "100%", display: "block", borderRadius: 1 }}
+                  sx={{
+                    width: "100%",
+                    aspectRatio: "2 / 3",
+                    objectFit: "cover",
+                    display: "block",
+                    borderRadius: 1,
+                  }}
                 ></Box>
               </Panel>
             </Grid>

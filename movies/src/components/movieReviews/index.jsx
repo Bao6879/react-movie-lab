@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { MoviesContext } from "../../contexts/moviesContext";
+import { MoviesContext, makeKey } from "../../contexts/moviesContext";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
@@ -29,7 +29,7 @@ export default function MovieReviews({ movie }) {
     return <h1>{error.message}</h1>;
   }
 
-  const myReview = myReviews[movie.id];
+  const myReview = myReviews[makeKey(movie)];
   let reviews = data.results;
   if (myReview !== undefined) {
     reviews = [myReview, ...data.results];

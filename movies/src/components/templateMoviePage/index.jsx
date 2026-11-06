@@ -423,7 +423,6 @@ const TemplateMoviePage = ({ movie, children }) => {
             <Grid size={12}>
               {/* cast */}
               <Panel>
-                {/* header row: title on the left, "full cast" link pushed to the right */}
                 <Box
                   sx={{
                     display: "flex",
@@ -447,13 +446,12 @@ const TemplateMoviePage = ({ movie, children }) => {
 
                 <Grid container columns={5} spacing={2}>
                   {movie.credits.cast.slice(0, 5).map((c) => (
-                    <Grid size={1}>
+                    <Grid size={1} key={c.id}>
                       <Link
                         component={RouterLink}
                         to={`/people/${c.id}`}
                         underline="none"
                         color="inherit"
-                        key={c.id}
                         sx={{ display: "block" }}
                       >
                         <Box
@@ -475,13 +473,20 @@ const TemplateMoviePage = ({ movie, children }) => {
                         />
                         <Typography
                           variant="subtitle1"
+                          noWrap
                           sx={{ fontWeight: "bold" }}
                         >
                           {c.name}
                         </Typography>
                         <Typography
                           variant="body2"
-                          sx={{ color: "warning.light" }}
+                          sx={{
+                            color: "warning.light",
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                          }}
                         >
                           {c.character}
                         </Typography>
@@ -493,7 +498,79 @@ const TemplateMoviePage = ({ movie, children }) => {
             </Grid>
             <Grid size={12}>
               {/* recommendations */}
-              <Panel>recommendations</Panel>
+              <Panel>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "baseline",
+                    marginBottom: 2,
+                  }}
+                >
+                  <Typography variant="h5" component="h2">
+                    Recommendations
+                  </Typography>
+                  <Link
+                    component={RouterLink}
+                    to={`/movies/${movie.id}/recommendations`}
+                    color="info.light"
+                    underline="hover"
+                  >
+                    See all
+                  </Link>
+                </Box>
+
+                {movie.recommendations.results.length !== 0 ? (
+                  <Grid container columns={5} spacing={2}>
+                    {movie.recommendations.results.slice(0, 5).map((r) => (
+                      <Grid size={1} key={r.id}>
+                        <Link
+                          component={RouterLink}
+                          to={`/movies/${r.id}`}
+                          underline="none"
+                          color="inherit"
+                          sx={{ display: "block" }}
+                        >
+                          <Box
+                            component="img"
+                            src={
+                              r.poster_path != undefined
+                                ? `https://image.tmdb.org/t/p/w185` +
+                                  r.poster_path
+                                : img
+                            }
+                            sx={{
+                              width: "100%",
+                              aspectRatio: "2 / 3",
+                              objectFit: "cover",
+                              display: "block",
+                              borderRadius: 1,
+                              marginBottom: 1,
+                            }}
+                          />
+                          <Typography
+                            variant="subtitle1"
+                            noWrap
+                            sx={{ fontWeight: "bold" }}
+                          >
+                            {r.title}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "warning.light" }}
+                          >
+                            {(r.release_date !== ""
+                              ? r.release_date.slice(0, 4)
+                              : "N/A") +
+                              " • " +
+                              r.vote_average.toFixed(2)}
+                          </Typography>
+                        </Link>
+                      </Grid>
+                    ))}
+                  </Grid>
+                ) : null}
+              </Panel>
             </Grid>
             <Grid size={12}>
               {/* reviews */}

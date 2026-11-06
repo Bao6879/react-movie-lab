@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Navigate, Routes } from "react-router";
 import ContentDiscoverPage from "./pages/contentDiscoverPage";
 import MoviePage from "./pages/movieDetailsPage";
+import ShowPage from "./pages/showDetailsPage";
 import FavoriteMoviesPage from "./pages/favoriteMoviesPage";
 import MovieReviewPage from "./pages/movieReviewPage";
 import WatchlistPage from "./pages/watchlistPage";
@@ -44,6 +45,7 @@ const App = () => {
             <Route path="/shows/playing" element={<ContentDiscoverPage />} />
             <Route path="/shows/top" element={<ContentDiscoverPage />} />
             <Route path="/shows/upcoming" element={<ContentDiscoverPage />} />
+            <Route path="/shows/:id" element={<ShowPage />} />
 
             <Route path="/people" element={<ContentDiscoverPage />} />
             <Route path="*" element={<Navigate to="/movies/discover" />} />

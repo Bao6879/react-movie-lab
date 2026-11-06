@@ -17,7 +17,7 @@ export default function MovieReviews({ movie }) {
   const { myReviews } = useContext(MoviesContext);
 
   const { data, error, isPending, isError } = useQuery({
-    queryKey: ["reviews", { id: movie.id }],
+    queryKey: ["reviews", { id: movie.id, type: movie.type }],
     queryFn: getMovieReviews,
   });
 

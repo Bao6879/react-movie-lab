@@ -118,6 +118,32 @@ export const getMovie = (args) => {
     });
 };
 
+export const getShow = (args) => {
+  const [, idPart] = args.queryKey;
+  const { id } = idPart;
+  return fetch(
+    `https://api.themoviedb.org/3/tv/${id}?api_key=${import.meta.env.VITE_TMDB_KEY}&append_to_response=aggregate_credits,recommendations,videos,content_ratings`,
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .then((show) => ({
+      ...show,
+      title: show.name,
+      date: show.first_air_date,
+      showType: show.type,
+      type: "show",
+    }))
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export const getGenres = () => {
   return fetch(
     "https://api.themoviedb.org/3/genre/movie/list?api_key=" +
@@ -182,9 +208,14 @@ export const getMovieImages = ({ queryKey }) => {
 
 export const getMovieReviews = ({ queryKey }) => {
   const [, idPart] = queryKey;
-  const { id } = idPart;
+  const { id, type = "movie" } = idPart;
+  // TMDB calls shows "tv" in its URLs
+  let path = type;
+  if (type === "show") {
+    path = "tv";
+  }
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${import.meta.env.VITE_TMDB_KEY}`,
+    `https://api.themoviedb.org/3/${path}/${id}/reviews?api_key=${import.meta.env.VITE_TMDB_KEY}`,
   )
     .then((response) => {
       if (!response.ok) {

@@ -91,6 +91,9 @@ const TemplateMoviePage = ({ movie, children }) => {
     .find((m) => m.iso_3166_1 === "US")
     ?.release_dates.find((r) => r.certification !== "")?.certification;
   console.log(ageRating);
+  const trailer = movie.videos.results.find(
+    (v) => v.site === "YouTube" && v.type === "Trailer",
+  );
 
   const isFavourite = favorites.includes(movie.id);
   const isInWatchlist = watchlist.includes(movie.id);
@@ -235,18 +238,11 @@ const TemplateMoviePage = ({ movie, children }) => {
                       startIcon={<PlayArrowIcon />}
                       component="a"
                       href={
-                        `https://www.youtube.com/watch?v=` +
-                        movie.videos.results.find(
-                          (v) => v.site === "YouTube" && v.type === "Trailer",
-                        ).key
+                        trailer !== undefined
+                          ? `https://www.youtube.com/watch?v=` + trailer.key
+                          : undefined
                       }
-                      disabled={
-                        movie.videos.results.find(
-                          (v) => v.site === "YouTube" && v.type === "Trailer",
-                        ).key == undefined
-                          ? true
-                          : false
-                      }
+                      disabled={trailer === undefined}
                       target="_blank"
                     >
                       Trailer

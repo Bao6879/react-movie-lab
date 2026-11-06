@@ -66,83 +66,64 @@ export default function ShowCard({ show, action }) {
   };
 
   return (
-    <Card
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
-      sx={{
-        transition: "transform 300ms ease, box-shadow 300ms ease",
+    <Link to={`/shows/${show.id}`}>
+      <Card
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
+        sx={{
+          transition: "transform 300ms ease, box-shadow 300ms ease",
 
-        "&:hover": {
-          transform: "translateY(-8px)",
-          boxShadow: 20,
-        },
-        display: "flex",
-        height: 300,
-        borderRadius: 10,
-      }}
-    >
-      {/* <CardHeader
-        avatar={
-          show.favorite ? (
-            <Avatar sx={{ backgroundColor: "red" }}>
-              <FavoriteIcon />
-            </Avatar>
-          ) : null
-        }
-        action={action(show)}
-        title={
-          <Typography
-            variant="body1"
-            component="p"
-            sx={{ textAlign: "center", fontWeight: "bolder" }}
-          >
-            {show.title}
-          </Typography>
-        }
-      /> */}
-      <Link to={`/shows/${show.id}`}>
+          "&:hover": {
+            transform: "translateY(-8px)",
+            boxShadow: 20,
+          },
+          display: "flex",
+          height: 300,
+          borderRadius: 10,
+        }}
+      >
         <CardMedia
           sx={{ aspectRatio: "16/9", height: "100%" }}
           image={posterUrl}
         />
-      </Link>
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          gap: 3,
-          padding: 3,
-          backgroundColor: "black",
-          color: "white",
-        }}
-      >
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography variant="h4" component="h2" sx={{ fontWeight: "bold" }}>
-            {show.title}
-          </Typography>
-          {show.original_name !== show.name && (
-            <Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
-              {show.original_name}
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            gap: 3,
+            padding: 3,
+            backgroundColor: "black",
+            color: "white",
+          }}
+        >
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography variant="h4" component="h2" sx={{ fontWeight: "bold" }}>
+              {show.title}
             </Typography>
-          )}
-          <Typography variant="subtitle1" sx={{ color: "grey.400", mb: 1 }}>
-            {dateFormatter(show.date)} · {show.origin_country} ·{" "}
-            {show.original_language.toUpperCase()}
-          </Typography>
-          <Typography variant="body1">{show.overview}</Typography>
+            {show.original_name !== show.name && (
+              <Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
+                {show.original_name}
+              </Typography>
+            )}
+            <Typography variant="subtitle1" sx={{ color: "grey.400", mb: 1 }}>
+              {dateFormatter(show.date)} · {show.origin_country} ·{" "}
+              {show.original_language.toUpperCase()}
+            </Typography>
+            <Typography variant="body1">{show.overview}</Typography>
+          </Box>
+          <Stack sx={{ alignItems: "flex-end", flexShrink: 0 }}>
+            <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+              ★ {show.vote_average.toFixed(1)}
+            </Typography>
+            <Typography variant="subtitle1">
+              {show.vote_count.toLocaleString()} votes
+            </Typography>
+            <Typography variant="subtitle1" sx={{ color: "success.light" }}>
+              {Math.round(show.popularity)} popularity
+            </Typography>
+          </Stack>
         </Box>
-        <Stack sx={{ alignItems: "flex-end", flexShrink: 0 }}>
-          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-            ★ {show.vote_average.toFixed(1)}
-          </Typography>
-          <Typography variant="subtitle1">
-            {show.vote_count.toLocaleString()} votes
-          </Typography>
-          <Typography variant="subtitle1" sx={{ color: "success.light" }}>
-            {Math.round(show.popularity)} popularity
-          </Typography>
-        </Stack>
-      </Box>
-    </Card>
+      </Card>
+    </Link>
   );
 }

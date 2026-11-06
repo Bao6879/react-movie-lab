@@ -13,6 +13,8 @@ const MovieHeader = (props) => {
   let year = "";
   if (movie.release_date) {
     year = movie.release_date.slice(0, 4);
+  } else if (movie.date) {
+    year = movie.date.slice(0, 4);
   }
 
   return (

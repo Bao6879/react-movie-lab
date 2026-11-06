@@ -11,26 +11,17 @@ import MuiAlert from "@mui/material/Alert";
 import { useNavigate } from "react-router";
 
 const ratings = [
-  {
-    value: 5,
-    label: "Excellent",
-  },
-  {
-    value: 4,
-    label: "Good",
-  },
-  {
-    value: 3,
-    label: "Average",
-  },
-  {
-    value: 2,
-    label: "Poor",
-  },
-  {
-    value: 0,
-    label: "Terrible",
-  },
+  { value: 10, label: "10 - Transcendant" },
+  { value: 9, label: "9 - Peak" },
+  { value: 8, label: "8 - Fire" },
+  { value: 7, label: "7 - Great" },
+  { value: 6, label: "6 - Good" },
+  { value: 5, label: "5 - Mid" },
+  { value: 4, label: "4 - Bad" },
+  { value: 3, label: "3 - Terrible" },
+  { value: 2, label: "2 - Trash" },
+  { value: 1, label: "1 - Horrendous" },
+  { value: 0, label: "0 - Atrocious" },
 ];
 
 const styles = {
@@ -60,10 +51,10 @@ const styles = {
   },
 };
 
-const ReviewForm = ({ movie }) => {
+const ReviewForm = ({ movie, onDone }) => {
   const context = useContext(MoviesContext);
 
-  const [rating, setRating] = useState(3);
+  const [rating, setRating] = useState(5);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -71,7 +62,7 @@ const ReviewForm = ({ movie }) => {
     author: "",
     review: "",
     agree: false,
-    rating: "3",
+    rating: "5",
   };
 
   const {
@@ -79,7 +70,7 @@ const ReviewForm = ({ movie }) => {
     formState: { errors },
     handleSubmit,
     reset,
-  } = useForm(defaultValues);
+  } = useForm({ defaultValues });
 
   const handleRatingChange = (event) => {
     setRating(event.target.value);
@@ -87,23 +78,29 @@ const ReviewForm = ({ movie }) => {
 
   const handleSnackClose = (event) => {
     setOpen(false);
-    navigate("/movies/favorites");
   };
 
-  const onSubmit = (review) => {
-    review.movieId = movie.id;
-    review.rating = rating;
-    // console.log(review);
+  const onSubmit = (formData) => {
+    const review = {
+      id: "mine",
+      movieId: movie.id,
+      author: formData.author,
+      content: formData.review,
+      created_at: new Date().toISOString(),
+      author_details: {
+        rating: rating,
+      },
+    };
     context.addReview(movie, review);
-    setOpen(true); // NEW
+    setOpen(true);
+
+    if (onDone) {
+      onDone();
+    }
   };
 
   return (
     <Box component="div" sx={styles.root}>
-      <Typography component="h2" variant="h3">
-        Write a review
-      </Typography>
-
       <Snackbar
         sx={styles.snack}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
@@ -115,13 +112,18 @@ const ReviewForm = ({ movie }) => {
           variant="filled"
           onClose={handleSnackClose}
         >
-          <Typography variant="h4">
+          <Typography variant="body1">
             Thank you for submitting a review
           </Typography>
         </MuiAlert>
       </Snackbar>
 
-      <form sx={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+      <Box
+        component="form"
+        sx={styles.form}
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
         <Controller
           name="author"
           control={control}
@@ -216,14 +218,14 @@ const ReviewForm = ({ movie }) => {
             onClick={() => {
               reset({
                 author: "",
-                content: "",
+                review: "",
               });
             }}
           >
             Reset
           </Button>
         </Box>
-      </form>
+      </Box>
     </Box>
   );
 };

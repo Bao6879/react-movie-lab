@@ -28,6 +28,13 @@ import LanguageIcon from "@mui/icons-material/Language";
 import img from "../../images/film-poster-placeholder.png";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { FavoriteOutlined } from "@mui/icons-material";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MovieReviews from "../movieReviews";
+import ReviewForm from "../reviewForm";
+import { dateFormatter } from "../../util";
 
 const darkTheme = createTheme({
   palette: {
@@ -37,6 +44,8 @@ const darkTheme = createTheme({
 
 const TemplateMoviePage = ({ movie, children }) => {
   const [postNum, setPostNum] = useState(0);
+  const [reviewsOpen, setReviewsOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const {
     favorites,
     addToFavorites,
@@ -47,6 +56,7 @@ const TemplateMoviePage = ({ movie, children }) => {
     seen,
     addToSeen,
     removeFromSeen,
+    myReviews,
   } = useContext(MoviesContext);
   const { data, error, isPending, isError } = useQuery({
     queryKey: ["images", { id: movie.id }],
@@ -85,6 +95,7 @@ const TemplateMoviePage = ({ movie, children }) => {
   const isFavourite = favorites.includes(movie.id);
   const isInWatchlist = watchlist.includes(movie.id);
   const isSeen = seen.includes(movie.id);
+  const hasReviewed = myReviews[movie.id] !== undefined;
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -143,7 +154,7 @@ const TemplateMoviePage = ({ movie, children }) => {
                       marginBottom: 2,
                     }}
                   >
-                    <Chip label={movie.release_date} />
+                    <Chip label={dateFormatter(movie.release_date)} />
                     {ageRating != undefined ? (
                       <Chip label={ageRating} variant="outlined" />
                     ) : null}
@@ -574,25 +585,60 @@ const TemplateMoviePage = ({ movie, children }) => {
             </Grid>
             <Grid size={12}>
               {/* reviews */}
-              <Panel>reviews</Panel>
+              <Accordion
+                expanded={reviewsOpen}
+                onChange={() => {
+                  setReviewsOpen(!reviewsOpen);
+                }}
+                disableGutters
+                sx={{
+                  backgroundColor: "rgba(0, 0, 0, 0.8)",
+                  backgroundImage: "none",
+                }}
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                      marginRight: 2,
+                    }}
+                  >
+                    <Typography variant="h5" component="h2">
+                      Reviews
+                    </Typography>
+                    {!hasReviewed ? (
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        component="span"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setReviewsOpen(true);
+                          setShowForm(!showForm);
+                        }}
+                      >
+                        {showForm ? "Back to reviews" : "Write a review"}
+                      </Button>
+                    ) : null}
+                  </Box>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {showForm ? (
+                    <ReviewForm
+                      movie={movie}
+                      onDone={() => setShowForm(false)}
+                    />
+                  ) : (
+                    <MovieReviews movie={movie} />
+                  )}
+                </AccordionDetails>
+              </Accordion>
             </Grid>
           </Grid>
         </Container>
-        {/* <MovieHeader movie={movie} /> */}
-
-        {/* <Grid container spacing={5} style={{ padding: "15px" }}>
-        <Grid size={{ xs: 3 }}>
-          <div
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "space-around",
-            }}
-          ></div>
-        </Grid>
-
-        <Grid size={{ xs: 9 }}>{children}</Grid>
-      </Grid> */}
       </Box>
     </ThemeProvider>
   );

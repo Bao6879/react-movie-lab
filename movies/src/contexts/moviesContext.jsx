@@ -62,7 +62,7 @@ const MoviesContextProvider = (props) => {
   };
 
   const removeFromSeen = (movie) => {
-    setFavorites(seen.filter((mId) => mId !== movie.id));
+    setSeen(seen.filter((mId) => mId !== movie.id));
   };
 
   const removeFromWatchlist = (movie) => {
@@ -78,6 +78,7 @@ const MoviesContextProvider = (props) => {
         discoverState,
         searchValue,
         reviewCount,
+        myReviews,
         addToFavorites,
         addToWatchlist,
         addToSeen,

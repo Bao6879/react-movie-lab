@@ -21,7 +21,7 @@ const MovieHeader = (props) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        paddingTop: 3,
+        paddingTop: 2,
       }}
     >
       <Box sx={{ textAlign: "center" }}>

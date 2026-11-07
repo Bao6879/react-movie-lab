@@ -124,6 +124,31 @@ export const getMovie = (args) => {
     });
 };
 
+export const getPerson = (args) => {
+  const [, idPart] = args.queryKey;
+  const { id } = idPart;
+  return fetch(
+    `https://api.themoviedb.org/3/person/${id}?api_key=${import.meta.env.VITE_TMDB_KEY}&append_to_response=combined_credits`,
+  )
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((error) => {
+          throw new Error(error.status_message || "Something went wrong");
+        });
+      }
+      return response.json();
+    })
+    .then((person) => ({
+      ...person,
+      // same names as the other fetchers, so the header works
+      title: person.name,
+      type: "person",
+    }))
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export const getShow = (args) => {
   const [, idPart] = args.queryKey;
   const { id } = idPart;

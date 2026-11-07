@@ -495,12 +495,11 @@ const TemplateShowPage = ({ show }) => {
                     display: "flex",
                     gap: 2,
                     overflowX: "auto",
-                    padding: 0.5, // room for the outline, overflow would cut it off
-                    paddingBottom: 1.5, // space above the scrollbar
+                    padding: 0.5,
+                    paddingBottom: 1.5,
                   }}
                 >
                   {show.seasons.map((s) => (
-                    // fixed width + no shrinking, so tiles keep their size and the row scrolls
                     <Box key={s.id} sx={{ width: 160, flexShrink: 0 }}>
                       <ButtonBase
                         onClick={() => {
@@ -513,7 +512,6 @@ const TemplateShowPage = ({ show }) => {
                           borderRadius: 1,
                           padding: 0.5,
                           outline: "2px solid",
-                          // orange on the selected season, invisible on the rest
                           outlineColor:
                             s.season_number === selectedSeason
                               ? "warning.light"

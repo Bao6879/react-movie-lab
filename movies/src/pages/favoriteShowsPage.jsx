@@ -36,8 +36,6 @@ const FavoriteShowsPage = () => {
     return q.data;
   });
 
-  const toDo = () => true;
-
   return (
     <PageTemplate
       items={shows}

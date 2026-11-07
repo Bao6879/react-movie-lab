@@ -36,8 +36,6 @@ const SeenMoviesPage = () => {
     return q.data;
   });
 
-  const toDo = () => true;
-
   return (
     <PageTemplate
       items={movies}

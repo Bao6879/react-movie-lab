@@ -151,7 +151,9 @@ const SiteHeader = () => {
               width: 120,
               boxShadow: 5,
               borderRadius: 5,
+              cursor: "pointer",
             }}
+            onClick={() => navigate("/movies/discover")}
             edge="start"
           />
           <TextField

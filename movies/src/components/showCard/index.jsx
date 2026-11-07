@@ -121,7 +121,7 @@ export default function ShowCard({ show, action }) {
             <Typography variant="subtitle1" sx={{ color: "success.light" }}>
               {Math.round(show.popularity)} popularity
             </Typography>
-            action={action(movie)}
+            action={action(show)}
           </Stack>
         </Box>
       </Card>

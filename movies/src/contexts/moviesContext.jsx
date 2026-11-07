@@ -2,9 +2,6 @@ import React, { useState } from "react";
 
 export const MoviesContext = React.createContext(null);
 
-// Movie and show ids overlap on TMDB (movie 1396 and show 1396 are different things),
-// so the lists store "movie-550" / "show-1396" instead of bare ids.
-// Movies from getMovie have no type, so anything that isn't a show counts as a movie.
 export const makeKey = (item) => {
   if (item.type === "show") {
     return "show-" + item.id;

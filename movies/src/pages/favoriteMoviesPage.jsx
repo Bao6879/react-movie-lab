@@ -10,8 +10,6 @@ import WriteReview from "../components/cardIcons/writeReview";
 const FavoriteMoviesPage = () => {
   const { favorites } = useContext(MoviesContext);
 
-  // the list holds "movie-550" / "show-1396" keys: keep the movies, cut off "movie-"
-  // (shows get their own page later)
   const movieIds = favorites
     .filter((key) => key.startsWith("movie-"))
     .map((key) => key.replace("movie-", ""));

@@ -25,6 +25,7 @@ import {
   Shuffle as ShuffleIcon,
   Subscriptions as SubscriptionsIcon,
   TheaterComedy as TheaterComedyIcon,
+  Visibility as VisibilityIcon,
 } from "@mui/icons-material";
 
 import { MoviesContext } from "../../contexts/moviesContext";
@@ -303,6 +304,12 @@ const SiteHeader = () => {
                   <SubscriptionsIcon />
                 </ListItemIcon>
                 Watchlist
+              </MenuItem>
+              <MenuItem onClick={() => handleAccMenuSelect("/seen")}>
+                <ListItemIcon>
+                  <VisibilityIcon />
+                </ListItemIcon>
+                Seen
               </MenuItem>
               <MenuItem onClick={() => handleAccMenuSelect("/settings")}>
                 <ListItemIcon>

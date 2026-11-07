@@ -7,13 +7,14 @@ import ShowPage from "./pages/showDetailsPage";
 import PersonPage from "./pages/personDetailsPage";
 import FavoriteMoviesPage from "./pages/favoriteMoviesPage";
 import MovieReviewPage from "./pages/movieReviewPage";
-import WatchlistPage from "./pages/watchlistPage";
+import WatchlistMoviesPage from "./pages/watchlistMoviesPage";
 import SiteHeader from "./components/siteHeader";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import MoviesContextProvider from "./contexts/moviesContext";
 import AddMovieReviewPage from "./pages/addMovieReviewPage";
-import SeenPage from "./pages/seenMoviesPage";
+import SeenMoviesPage from "./pages/seenMoviesPage";
+import FavoriteShowsPage from "./pages/favoriteShowsPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,9 +33,13 @@ const App = () => {
         <MoviesContextProvider>
           <SiteHeader />
           <Routes>
-            <Route path="/favorites" element={<FavoriteMoviesPage />} />
-            <Route path="/watchlist" element={<WatchlistPage />} />
-            <Route path="/seen" element={<SeenPage />} />
+            <Route path="/favoritesMovie" element={<FavoriteMoviesPage />} />
+            <Route path="/watchlistMovie" element={<WatchlistMoviesPage />} />
+            <Route path="/seenMovie" element={<SeenMoviesPage />} />
+
+            <Route path="/favoritesShow" element={<FavoriteShowsPage />} />
+            {/* <Route path="/watchlistShow" element={<WatchlistShowsPage />} /> */}
+            {/* <Route path="/seenShow" element={<SeenShowsPage />} /> */}
 
             <Route path="/reviews/:id" element={<MovieReviewPage />} />
             <Route path="/movies/:id" element={<MoviePage />} />

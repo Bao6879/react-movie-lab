@@ -10,6 +10,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
+import Link from "@mui/material/Link";
 import { styled } from "@mui/material/styles";
 import {
   AccountCircle as AccountCircleIcon,
@@ -293,19 +294,37 @@ const SiteHeader = () => {
               onClose={handleCloseAcc}
               open={openAcc}
             >
-              <MenuItem onClick={() => handleAccMenuSelect("/favorites")}>
+              <MenuItem onClick={() => handleAccMenuSelect("/favoritesMovie")}>
                 <ListItemIcon>
                   <FavoriteIcon />
                 </ListItemIcon>
                 Favorites
               </MenuItem>
-              <MenuItem onClick={() => handleAccMenuSelect("/watchlist")}>
+              <MenuItem onClick={() => handleAccMenuSelect("/favoritesShow")}>
+                <ListItemIcon>
+                  <FavoriteIcon />
+                </ListItemIcon>
+                Favorites
+              </MenuItem>
+              <MenuItem onClick={() => handleAccMenuSelect("/watchlistMovie")}>
                 <ListItemIcon>
                   <SubscriptionsIcon />
                 </ListItemIcon>
                 Watchlist
               </MenuItem>
-              <MenuItem onClick={() => handleAccMenuSelect("/seen")}>
+              <MenuItem onClick={() => handleAccMenuSelect("/watchlistShow")}>
+                <ListItemIcon>
+                  <SubscriptionsIcon />
+                </ListItemIcon>
+                Watchlist
+              </MenuItem>
+              <MenuItem onClick={() => handleAccMenuSelect("/seenMovie")}>
+                <ListItemIcon>
+                  <VisibilityIcon />
+                </ListItemIcon>
+                Seen
+              </MenuItem>
+              <MenuItem onClick={() => handleAccMenuSelect("/seenShow")}>
                 <ListItemIcon>
                   <VisibilityIcon />
                 </ListItemIcon>

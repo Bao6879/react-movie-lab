@@ -1,17 +1,15 @@
 import { useContext } from "react";
-import PageTemplate from "../components/templateContentListPage";
-import { MoviesContext } from "../contexts/moviesContext";
+import PageTemplate from "../components/templateContentListPage/index.jsx";
+import { MoviesContext } from "../contexts/moviesContext.jsx";
 import { useQueries } from "@tanstack/react-query";
-import { getMovie } from "../api/tmdb-api";
-import Spinner from "../components/spinner";
+import { getMovie } from "../api/tmdb-api.jsx";
+import Spinner from "../components/spinner/index.jsx";
 import RemoveFromWatchlist from "../components/cardIcons/removeFromWatchlist.jsx";
-import WriteReview from "../components/cardIcons/writeReview";
+import WriteReview from "../components/cardIcons/writeReview.jsx";
 
-const watchlistPage = () => {
+const WatchlistMoviesPage = () => {
   const { watchlist } = useContext(MoviesContext);
 
-  // the list holds "movie-550" / "show-1396" keys: keep the movies, cut off "movie-"
-  // (shows get their own page later)
   const movieIds = watchlist
     .filter((key) => key.startsWith("movie-"))
     .map((key) => key.replace("movie-", ""));
@@ -54,4 +52,4 @@ const watchlistPage = () => {
   );
 };
 
-export default watchlistPage;
+export default WatchlistMoviesPage;

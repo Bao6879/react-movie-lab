@@ -276,7 +276,7 @@ const SiteHeader = () => {
                 </ListItemIcon>
                 I'm Feeling Lucky
               </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={() => alert("Coming soon")}>
                 <ListItemIcon>
                   <QuestionMarkIcon />
                 </ListItemIcon>
@@ -332,7 +332,7 @@ const SiteHeader = () => {
                 </ListItemIcon>
                 Seen
               </MenuItem>
-              <MenuItem onClick={() => handleAccMenuSelect("/settings")}>
+              <MenuItem onClick={() => alert("Coming soon")}>
                 <ListItemIcon>
                   <SettingsIcon />
                 </ListItemIcon>

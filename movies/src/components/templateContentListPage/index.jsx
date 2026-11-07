@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FilterCard from "../filterCard";
 import ContentList from "../contentList";
 import Grid from "@mui/material/Grid";
-import { MoviesContext } from "../../contexts/moviesContext";
+import { MoviesContext, makeKey } from "../../contexts/moviesContext";
 import { useContext } from "react";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
@@ -29,7 +29,7 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
   ]);
   const [sortDirection, setSortDirection] = useState(1);
   const [sortCriteria, setSortCriteria] = useState(0);
-  const { searchValue, changeSearchValue } = useContext(MoviesContext);
+  const { searchValue, changeSearchValue, seen } = useContext(MoviesContext);
 
   const genreId = Number(genreFilter);
 
@@ -61,6 +61,12 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
         //Release Date
         if (m.type === "person") return true;
         return m.date >= releaseDateRange[0] && m.date <= releaseDateRange[1];
+      })
+      .filter((m) => {
+        //Seen
+        if (seenFilter === "all" || m.type === "person") return true;
+        if (seenFilter === "seen") return seen.includes(makeKey(m));
+        return !seen.includes(makeKey(m));
       });
     console.log(m);
     let direction = 1; //Descending

@@ -447,14 +447,6 @@ const TemplateMoviePage = ({ movie, children }) => {
                   <Typography variant="h5" component="h2">
                     Top cast
                   </Typography>
-                  <Link
-                    component={RouterLink}
-                    to={`/movies/${movie.id}/credits`}
-                    color="info.light"
-                    underline="hover"
-                  >
-                    Full cast and crew
-                  </Link>
                 </Box>
 
                 <Grid container columns={5} spacing={2}>
@@ -523,14 +515,6 @@ const TemplateMoviePage = ({ movie, children }) => {
                   <Typography variant="h5" component="h2">
                     Recommendations
                   </Typography>
-                  <Link
-                    component={RouterLink}
-                    to={`/movies/${movie.id}/recommendations`}
-                    color="info.light"
-                    underline="hover"
-                  >
-                    See all
-                  </Link>
                 </Box>
 
                 {movie.recommendations.results.length !== 0 ? (

@@ -414,14 +414,6 @@ const TemplateShowPage = ({ show }) => {
                   <Typography variant="h5" component="h2">
                     Top cast
                   </Typography>
-                  <Link
-                    component={RouterLink}
-                    to={`/shows/${show.id}/credits`}
-                    color="info.light"
-                    underline="hover"
-                  >
-                    Full cast and crew
-                  </Link>
                 </Box>
 
                 {/* aggregate_credits = cast across every season */}
@@ -579,14 +571,6 @@ const TemplateShowPage = ({ show }) => {
                   <Typography variant="h5" component="h2">
                     Recommendations
                   </Typography>
-                  <Link
-                    component={RouterLink}
-                    to={`/shows/${show.id}/recommendations`}
-                    color="info.light"
-                    underline="hover"
-                  >
-                    See all
-                  </Link>
                 </Box>
 
                 {show.recommendations.results.length !== 0 ? (

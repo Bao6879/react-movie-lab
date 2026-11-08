@@ -6,7 +6,9 @@ Built with React.
 
 ## Video demo
 
-Not here yet, will be soon.
+The video is here: [Link](https://drive.google.com/file/d/1_4a8m2Vb5XYxhKN0avZ-vXdiMHWY9TlA/view?usp=sharing).
+
+There is a Camtasia watermark, but the app itself is still visible.
 
 ## Running it
 

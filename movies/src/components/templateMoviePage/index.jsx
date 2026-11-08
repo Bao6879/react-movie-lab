@@ -86,11 +86,9 @@ const TemplateMoviePage = ({ movie, children }) => {
   }
 
   const posters = data.posters.slice(0, 10);
-  console.log(movie);
   const ageRating = movie.release_dates.results
     .find((m) => m.iso_3166_1 === "US")
     ?.release_dates.find((r) => r.certification !== "")?.certification;
-  console.log(ageRating);
   const trailer = movie.videos.results.find(
     (v) => v.site === "YouTube" && v.type === "Trailer",
   );

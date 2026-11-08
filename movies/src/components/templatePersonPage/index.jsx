@@ -56,7 +56,6 @@ const TemplatePersonPage = ({ person }) => {
     return <h1>{error.message}</h1>;
   }
 
-  console.log(person);
   const photos = data.profiles.slice(0, 10);
 
   const knownFor = [

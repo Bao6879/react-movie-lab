@@ -143,9 +143,7 @@ const SiteHeader = () => {
 
   const randomize = (event) => {
     setAnchorMisc(null);
-    console.log(data.results);
     let index = Math.floor(Math.random() * data.results.length);
-    console.log(index);
     navigate(`${type}/${data.results[index].id}`);
   };
 
@@ -335,37 +333,37 @@ const SiteHeader = () => {
                 <ListItemIcon>
                   <FavoriteIcon />
                 </ListItemIcon>
-                Favorites
+                Favorite Movies
               </MenuItem>
               <MenuItem onClick={() => handleAccMenuSelect("/favoritesShow")}>
                 <ListItemIcon>
                   <FavoriteIcon />
                 </ListItemIcon>
-                Favorites
+                Favorites Shows
               </MenuItem>
               <MenuItem onClick={() => handleAccMenuSelect("/watchlistMovie")}>
                 <ListItemIcon>
                   <SubscriptionsIcon />
                 </ListItemIcon>
-                Watchlist
+                Watchlist Movies
               </MenuItem>
               <MenuItem onClick={() => handleAccMenuSelect("/watchlistShow")}>
                 <ListItemIcon>
                   <SubscriptionsIcon />
                 </ListItemIcon>
-                Watchlist
+                Watchlist Shows
               </MenuItem>
               <MenuItem onClick={() => handleAccMenuSelect("/seenMovie")}>
                 <ListItemIcon>
                   <VisibilityIcon />
                 </ListItemIcon>
-                Seen
+                Seen Movies
               </MenuItem>
               <MenuItem onClick={() => handleAccMenuSelect("/seenShow")}>
                 <ListItemIcon>
                   <VisibilityIcon />
                 </ListItemIcon>
-                Seen
+                Seen Shows
               </MenuItem>
               <MenuItem onClick={() => alert("Coming soon")}>
                 <ListItemIcon>

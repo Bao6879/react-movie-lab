@@ -68,7 +68,6 @@ function ContentListPageTemplate({ items, action, type = "movie" }) {
         if (seenFilter === "seen") return seen.includes(makeKey(m));
         return !seen.includes(makeKey(m));
       });
-    console.log(m);
     let direction = 1; //Descending
     if (sortDirection === 0) direction = -1;
     switch (sortCriteria) {

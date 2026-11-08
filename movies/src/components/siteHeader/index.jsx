@@ -1,5 +1,7 @@
 import { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { getMovies, getPeople, getShows } from "../../api/tmdb-api";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,7 +12,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
-import Link from "@mui/material/Link";
+import Spinner from "../spinner";
 import { styled } from "@mui/material/styles";
 import {
   AccountCircle as AccountCircleIcon,
@@ -46,6 +48,31 @@ const SiteHeader = () => {
     openAcc = Boolean(anchorAcc);
 
   const navigate = useNavigate();
+  const section = location.pathname.split("/")[1];
+  const category = location.pathname.split("/")[2];
+
+  let type = "movies";
+  let getContent = getMovies;
+  if (section === "shows") {
+    type = "shows";
+    getContent = getShows;
+  } else if (section === "people") {
+    type = "people";
+    getContent = getPeople;
+  }
+
+  const { data, error, isPending, isError } = useQuery({
+    queryKey: [section, { category: category }],
+    queryFn: getContent,
+  });
+
+  if (isPending) {
+    return <Spinner />;
+  }
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
 
   const handleTextChange = (event) => {
     changeSearchValue(event.target.value);
@@ -112,6 +139,14 @@ const SiteHeader = () => {
 
   const handleCloseAcc = (event) => {
     setAnchorAcc(null);
+  };
+
+  const randomize = (event) => {
+    setAnchorMisc(null);
+    console.log(data.results);
+    let index = Math.floor(Math.random() * data.results.length);
+    console.log(index);
+    navigate(`${type}/${data.results[index].id}`);
   };
 
   const headerButtonSx = {
@@ -270,7 +305,7 @@ const SiteHeader = () => {
               onClose={handleCloseMisc}
               open={openMisc}
             >
-              <MenuItem>
+              <MenuItem onClick={() => randomize()}>
                 <ListItemIcon>
                   <ShuffleIcon />
                 </ListItemIcon>
